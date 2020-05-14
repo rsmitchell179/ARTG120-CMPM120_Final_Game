@@ -10,13 +10,15 @@
 "use strict";
 
 let config = {
-    type: Phaser.AUTO,
-    width: 832,
-    height: 576,
+    type: Phaser.CANVAS,
+    pixelArt: true,
+    width: 528,
+    height: 368,
+    zoom: 2,
     scale: {
         autoCenter: Phaser.Scale.CENTER_BOTH
     },
-    scene: [Load, Menu, Play],
+    scene: [Load, Menu, Play, level_2],
     physics: {
         default: 'arcade',
         arcade: {
@@ -36,4 +38,5 @@ let game = new Phaser.Game(config);
 let cursors;
 let centerX = game.config.width/2;
 let centerY = game.config.height/2; 
+let text_space = 64;
 let keyG, keyS, keyD, keyRIGHT;

@@ -1,6 +1,6 @@
-class Menu extends Phaser.Scene {
+class level_2 extends Phaser.Scene {
     constructor() {
-        super("menuScene");
+        super("level_2_scene");
     }
 
     create() {
@@ -18,8 +18,7 @@ class Menu extends Phaser.Scene {
             fixedWidth: 0
         }
 
-        this.add.text(centerX, centerY - text_space, 'Prototype', menuConfig).setOrigin(0.5);
-        this.add.text(centerX, centerY, 'Use → to start', menuConfig).setOrigin(0.5);
+        this.add.text(centerX, centerY, 'Congratulations!!', menuConfig).setOrigin(0.5);
         menuConfig.backgroundColor = '#00FF00';
         menuConfig.color = '#000';
 
