@@ -28,6 +28,7 @@ class Menu extends Phaser.Scene {
 
     update() {
         if(Phaser.Input.Keyboard.JustDown(key_right)) {
+            this.sound.play('menu_select');
             this.scene.start("play_scene");
         }
     }

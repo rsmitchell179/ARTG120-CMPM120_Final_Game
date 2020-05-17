@@ -18,14 +18,15 @@ class Load extends Phaser.Scene {
 
         // Load game audio
         this.load.path = "./assets/audio/";
-        this.load.audio = ("grow_sound", "grow_powerup.wav");
-        this.load.audio = ("jump_sound", "jump.wav");
-        this.load.audio = ("level_complete", "level_complete.wav");
-        this.load.audio = ("shrink_sound", "shrink_powerup.wav");
+        this.load.audio('grow_sound', "GrowPowerup.wav");
+        this.load.audio('jump_sound', 'Jump.wav');
+        this.load.audio("level_complete", "LevelComplete.wav");
+        this.load.audio("shrink_sound", "ShrinkPowerup.wav");
+        this.load.audio('menu_select', 'Menu_Select.wav');
     }
 
     update() {
-        this.scene.start("menu_scene");
+        this.scene.start('menu_scene');
     }
 
 }

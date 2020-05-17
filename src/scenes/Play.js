@@ -13,7 +13,6 @@ class Play extends Phaser.Scene {
         this.shrunk = false;
         this.grown = false;
 
-
         // Load Map
         // Create the level
         const temp_level = this.add.tilemap("level_temp");
@@ -69,7 +68,6 @@ class Play extends Phaser.Scene {
         const door_text = temp_level.findObject("text_layer", obj => obj.name === "door_text");
 
         this.shrink_text = this.add.text(shrink_text.x, shrink_text.y, 'Collect blue\npowerup to shrink');
-        this.grow_text = this.add.text(grow_text.x-14, grow_text.y, 'Collect yellow\npowerup to grow');
         this.add.text(normal_text.x, normal_text.y, 'Press D to return\nto normal size\nPress R to reset level');
         this.add.text(door_text.x-10, door_text.y, 'Get to the door\nto complete ->\nthe level', {fontSize: 14});
 
@@ -130,7 +128,7 @@ class Play extends Phaser.Scene {
             obj2.destroy(); // remove grow powerup
             this.grow_text.destroy();
             this.box_text = this.add.text(box_text.x-5, box_text.y, 'Push box here|');
-            //this.sound.play("grow_sound");
+            this.sound.play("grow_sound", {volume: 0.1});
             this.player.setScale(2);
             this.grown = true;
             this.block.body.immovable = false;
@@ -140,7 +138,8 @@ class Play extends Phaser.Scene {
         this.physics.add.overlap(this.player, this.shrink_group, (obj1, obj2) => {
             obj2.destroy(); // remove shrink powerup
             this.shrink_text.destroy();
-            //this.sound.play("shrink_sound")
+            this.grow_text = this.add.text(grow_text.x-14, grow_text.y, 'Collect yellow\npowerup to grow');
+            this.sound.play("shrink_sound", {volume: 0.1})
             this.player.setScale(0.5);
             this.shrunk = true;
             this.block.body.immovable = true;
@@ -148,7 +147,7 @@ class Play extends Phaser.Scene {
         });
 
         this.physics.add.overlap(this.player, this.door_group, (obj1, obj2) => {
-            //this.sound.play("level_complete");
+            this.sound.play("level_complete", {volume: 0.1});
             this.scene.start("level_2_scene");
         });
     }
@@ -168,7 +167,7 @@ class Play extends Phaser.Scene {
 
         if((this.player.body.blocked.down || this.player.body.touching.down) && Phaser.Input.Keyboard.JustDown(cursors.up) && !this.grown) {
             this.player.body.setVelocityY(this.jump_vel);
-            //this.sound.play("jump_sound");
+            this.sound.play('jump_sound', {volume: 0.1});
         }
 
         // if(Phaser.Input.Keyboard.JustDown(keyS) && !this.shrunk) {

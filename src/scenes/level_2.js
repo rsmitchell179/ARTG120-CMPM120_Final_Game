@@ -29,10 +29,12 @@ class level_2 extends Phaser.Scene {
 
     update() {
         if(Phaser.Input.Keyboard.JustDown(key_right)) {
+            this.sound.play('menu_select');
             this.scene.start("play_scene");
         }
-        if(Phaser.Input.Keyboard.JustDown(key_m)) { 
-            this.scene.start("menu_scene");
+        if(Phaser.Input.Keyboard.JustDown(key_m)) {
+            this.sound.play('menu_select'); 
+            this.scene.start("load_scene");
         }
     }
 }
