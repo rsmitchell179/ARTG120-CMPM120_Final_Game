@@ -39,4 +39,4 @@ let cursors;
 let centerX = game.config.width/2;
 let centerY = game.config.height/2; 
 let text_space = 64;
-let keyG, keyS, keyD, keyRIGHT;
+let key_g, key_s, key_d, key_r, key_m ,key_right;
