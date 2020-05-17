@@ -16,7 +16,7 @@ class Menu extends Phaser.Scene {
             },
             fixedWidth: 0
         }
-
+        // Adds text to the screen
         this.add.text(centerX, centerY - text_space, 'Cubic Escape', menuConfig).setOrigin(0.5);
         this.add.text(centerX, centerY, 'Use → to start', menuConfig).setOrigin(0.5);
         menuConfig.backgroundColor = '#00FF00';
@@ -27,6 +27,7 @@ class Menu extends Phaser.Scene {
     }
 
     update() {
+        // Takes you to the first level
         if(Phaser.Input.Keyboard.JustDown(key_right)) {
             this.sound.play('menu_select');
             this.scene.start("play_scene");

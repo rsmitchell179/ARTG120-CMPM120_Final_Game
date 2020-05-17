@@ -27,6 +27,7 @@ class Play extends Phaser.Scene {
 
         
         // Spawns Tilemap Objects
+        // Spawns shrink powerup
         this.shrink_powerup = temp_level.createFromObjects("object_layer", "shrink_powerup", {
             key: "tileset",
             frame: 7
@@ -39,20 +40,22 @@ class Play extends Phaser.Scene {
 
         this.shrink_group = this.add.group(this.shrink_powerup);
 
+        // Spawns grow powerup
         this.grow_powerup = temp_level.createFromObjects("object_layer", "grow_powerup", {
             key: "tileset",
             frame: 6
         }, this);
         this.physics.world.enable(this.grow_powerup, Phaser.Physics.Arcade.STATIC_BODY);
-        
+    
         this.grow_powerup.map((grow_power_up) => {
             grow_power_up.body.setCircle(5).setOffset(3, 3); 
         });
 
         this.grow_group = this.add.group(this.grow_powerup);
 
-        this.physics.world.bounds.setTo(0, 0, temp_level.widthInPixels, temp_level.heightInPixels);
-
+        //this.physics.world.bounds.setTo(0, 0, temp_level.widthInPixels, temp_level.heightInPixels);
+        
+        // Spawns exit door
         this.door = temp_level.createFromObjects("object_layer", "door", {
             key: "tileset",
             frame: 3
@@ -61,16 +64,18 @@ class Play extends Phaser.Scene {
 
         this.door_group = this.add.group(this.door);
         
+        // Creates instructional text
         const shrink_text = temp_level.findObject("text_layer", obj => obj.name === "shrink_text");
         const grow_text = temp_level.findObject("text_layer", obj => obj.name === "grow_text");
         const box_text = temp_level.findObject("text_layer", obj => obj.name === "box_text");
         const normal_text = temp_level.findObject("text_layer", obj => obj.name === "normal_text");
         const door_text = temp_level.findObject("text_layer", obj => obj.name === "door_text");
-
+        // Spawn in intructional text
         this.shrink_text = this.add.text(shrink_text.x, shrink_text.y, 'Collect blue\npowerup to shrink');
         this.add.text(normal_text.x, normal_text.y, 'Press D to return\nto normal size\nPress R to reset level');
         this.add.text(door_text.x-10, door_text.y, 'Get to the door\nto complete ->\nthe level', {fontSize: 14});
-
+        
+        // Creates a half block for shrunken tunnel escape
         this.half_block = temp_level.createFromObjects("object_layer", "half_block", {
             key: "tileset",
             frame: 9
@@ -82,20 +87,16 @@ class Play extends Phaser.Scene {
             half_block.body.setSize(16, 8).setOffset(0, -1)
         });
 
-
+        // Spawns in boxes
         const box_spawn1 = temp_level.findObject("object_layer", obj => obj.name === "box_spawn1");
         this.block = this.physics.add.sprite(box_spawn1.x, box_spawn1.y,'box');
         this.block.body.setAllowGravity(true);
         this.block.body.immovable = true;
         
-
-
         const box_spawn2 = temp_level.findObject("object_layer", obj => obj.name === "box_spawn2");
         this.block2 = this.physics.add.sprite(box_spawn2.x, box_spawn2.y,'box');
         this.block2.body.setAllowGravity(true);
         this.block2.body.immovable = true;
-
-
 
         // #region Add Player to game world
         const player_spawn = temp_level.findObject("object_layer", obj => obj.name === "player_spawn");
@@ -123,7 +124,9 @@ class Play extends Phaser.Scene {
         this.physics.add.collider(this.block, platform_layer);
         this.physics.add.collider(this.block2, platform_layer);
         this.physics.add.collider(this.player, this.half_block);
-
+        
+        // Overlap checkers
+        // Grow powerup overlap check
         this.physics.add.overlap(this.player, this.grow_group, (obj1, obj2) => {
             obj2.destroy(); // remove grow powerup
             this.grow_text.destroy();
@@ -135,6 +138,7 @@ class Play extends Phaser.Scene {
             this.block2.body.immovable = false;
         });
 
+        // Shrink powerup overlap check
         this.physics.add.overlap(this.player, this.shrink_group, (obj1, obj2) => {
             obj2.destroy(); // remove shrink powerup
             this.shrink_text.destroy();
@@ -146,6 +150,7 @@ class Play extends Phaser.Scene {
             this.block2.body.immovable = true;
         });
 
+        // Door powerup overlap check
         this.physics.add.overlap(this.player, this.door_group, (obj1, obj2) => {
             this.sound.play("level_complete", {volume: 0.1});
             this.scene.start("level_2_scene");
@@ -165,10 +170,13 @@ class Play extends Phaser.Scene {
             this.player.body.setVelocityX(0);
         }
 
+        // Jump logic
         if((this.player.body.blocked.down || this.player.body.touching.down) && Phaser.Input.Keyboard.JustDown(cursors.up) && !this.grown) {
             this.player.body.setVelocityY(this.jump_vel);
             this.sound.play('jump_sound', {volume: 0.1});
         }
+
+        // Buttons for shrink and grow for debug purposes
 
         // if(Phaser.Input.Keyboard.JustDown(keyS) && !this.shrunk) {
         //     this.player.setScale(0.5);
@@ -184,7 +192,8 @@ class Play extends Phaser.Scene {
         //     this.block2.body.immovable = false;
         //     //console.log(this.grown);
         // }
-        
+
+        // Reset Scale
         if(Phaser.Input.Keyboard.JustDown(key_d)) {
             //console.log(this.grown);
             this.player.setScale(1);
@@ -193,7 +202,7 @@ class Play extends Phaser.Scene {
             this.block.body.immovable = true;
             this.block2.body.immovable = true;
         }
-        // Collision logic
+        // Collision logic for box
         if(this.player.body.touching.left) {
             if(this.grown) {
                 //this.block.body.setAccelerationX(-this.ACCELERATION);
@@ -205,28 +214,11 @@ class Play extends Phaser.Scene {
             this.block2.body.setAccelerationX(0);
             this.block2.body.setDragX(this.drag);
         }
-
+        
+        // Reset level
         if(Phaser.Input.Keyboard.JustDown(key_r)) {
             this.scene.restart(this.level);
         }
-        // if(this.player.body.touching.right) {
-        //     if(this.grown) {
-        //         this.block.body.setAccelerationX(this.ACCELERATION);
-        //     } 
-        // }
-        // else {
-        //     this.block.body.setAccelerationX(0);
-        //     this.block.body.setDrag(this.DRAG);
-        // }
-
-        // player jump
-        // note that we need body.blocked rather than body.touching b/c the former applies to tilemap tiles and the latter to the "ground"
-        // if(!this.player.body.blocked.down) {
-        //     //this.player.anims.play('jump', true);
-        // }
-        // if(this.player.body.blocked.down && Phaser.Input.Keyboard.JustDown(cursors.up)) {
-        //     this.player.body.setVelocityY(this.JUMP_VELOCITY);
-        // }
     }
 
 }
