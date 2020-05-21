@@ -18,11 +18,12 @@ let config = {
     scale: {
         autoCenter: Phaser.Scale.CENTER_BOTH
     },
-    scene: [Load, Menu, Play, level_2],
+    scene: [load, menu, level_1, level_2, end_game],
     physics: {
         default: 'arcade',
         arcade: {
             debug: true,
+            TILE_BIAS: 32,
             gravity: {
                 x: 0,
                 y: 0

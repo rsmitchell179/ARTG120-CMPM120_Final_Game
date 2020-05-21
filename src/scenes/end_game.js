@@ -1,6 +1,6 @@
-class menu extends Phaser.Scene {
+class end_game extends Phaser.Scene {
     constructor() {
-        super("menu_scene");
+        super("end_game_scene");
     }
 
     create() {
@@ -16,21 +16,28 @@ class menu extends Phaser.Scene {
             },
             fixedWidth: 0
         }
-        // Adds text to the screen
-        this.add.text(centerX, centerY - text_space, 'Cubic Escape', menuConfig).setOrigin(0.5);
-        this.add.text(centerX, centerY, 'Use → to start', menuConfig).setOrigin(0.5);
+
+        // End Game Text
+        this.add.text(centerX, centerY - 70, 'Congratulations!!', menuConfig).setOrigin(0.5);
+        this.add.text(centerX, centerY, 'Press M for menu      \nPress → to play level again', menuConfig).setOrigin(0.5);
         menuConfig.backgroundColor = '#00FF00';
         menuConfig.color = '#000';
 
         // Define keys
         key_right = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+        key_m = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M);
     }
 
     update() {
-        // Takes you to the first level
+        // Goes back to play scene
         if(Phaser.Input.Keyboard.JustDown(key_right)) {
             this.sound.play('menu_select');
-            this.scene.start("level_1_scene");
+            this.scene.start("level_2_scene");
+        }
+        // Goes back to menu scene
+        if(Phaser.Input.Keyboard.JustDown(key_m)) {
+            this.sound.play('menu_select'); 
+            this.scene.start("load_scene");
         }
     }
 }

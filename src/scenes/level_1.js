@@ -1,6 +1,6 @@
-class Play extends Phaser.Scene {
+class level_1 extends Phaser.Scene {
     constructor() {
-        super("play_scene");
+        super("level_1_scene");
     }
 
     create() {
@@ -15,12 +15,12 @@ class Play extends Phaser.Scene {
 
         // Load Map
         // Create the level
-        const temp_level = this.add.tilemap("level_temp");
+        const level_1 = this.add.tilemap("level_temp");
         // Add the tileset to the map
-        const tileset = temp_level.addTilesetImage("tileset");
+        const tileset = level_1.addTilesetImage("tileset");
         // Create tilemap layers
-        const background_layer = temp_level.createStaticLayer("background_layer", tileset, 0 ,0);
-        const platform_layer = temp_level.createStaticLayer("platform_layer", tileset, 0 ,0);
+        const background_layer = level_1.createStaticLayer("background_layer", tileset, 0 ,0);
+        const platform_layer = level_1.createStaticLayer("platform_layer", tileset, 0 ,0);
 
         // Set map collisions
         platform_layer.setCollisionByProperty({collides: true });
@@ -28,7 +28,7 @@ class Play extends Phaser.Scene {
         
         // Spawns Tilemap Objects
         // Spawns shrink powerup
-        this.shrink_powerup = temp_level.createFromObjects("object_layer", "shrink_powerup", {
+        this.shrink_powerup = level_1.createFromObjects("object_layer", "shrink_powerup", {
             key: "tileset",
             frame: 7
         }, this);
@@ -41,7 +41,7 @@ class Play extends Phaser.Scene {
         this.shrink_group = this.add.group(this.shrink_powerup);
 
         // Spawns grow powerup
-        this.grow_powerup = temp_level.createFromObjects("object_layer", "grow_powerup", {
+        this.grow_powerup = level_1.createFromObjects("object_layer", "grow_powerup", {
             key: "tileset",
             frame: 6
         }, this);
@@ -53,10 +53,10 @@ class Play extends Phaser.Scene {
 
         this.grow_group = this.add.group(this.grow_powerup);
 
-        //this.physics.world.bounds.setTo(0, 0, temp_level.widthInPixels, temp_level.heightInPixels);
+        //this.physics.world.bounds.setTo(0, 0, level_1.widthInPixels, level_1.heightInPixels);
         
         // Spawns exit door
-        this.door = temp_level.createFromObjects("object_layer", "door", {
+        this.door = level_1.createFromObjects("object_layer", "door", {
             key: "tileset",
             frame: 3
         }, this);
@@ -65,18 +65,18 @@ class Play extends Phaser.Scene {
         this.door_group = this.add.group(this.door);
         
         // Creates instructional text
-        const shrink_text = temp_level.findObject("text_layer", obj => obj.name === "shrink_text");
-        const grow_text = temp_level.findObject("text_layer", obj => obj.name === "grow_text");
-        const box_text = temp_level.findObject("text_layer", obj => obj.name === "box_text");
-        const normal_text = temp_level.findObject("text_layer", obj => obj.name === "normal_text");
-        const door_text = temp_level.findObject("text_layer", obj => obj.name === "door_text");
+        const shrink_text = level_1.findObject("text_layer", obj => obj.name === "shrink_text");
+        const grow_text = level_1.findObject("text_layer", obj => obj.name === "grow_text");
+        const box_text = level_1.findObject("text_layer", obj => obj.name === "box_text");
+        const normal_text = level_1.findObject("text_layer", obj => obj.name === "normal_text");
+        const door_text = level_1.findObject("text_layer", obj => obj.name === "door_text");
         // Spawn in intructional text
         this.shrink_text = this.add.text(shrink_text.x, shrink_text.y, 'Collect blue\npowerup to shrink');
         this.add.text(normal_text.x, normal_text.y, 'Press D to return\nto normal size\nPress R to reset level');
         this.add.text(door_text.x-10, door_text.y, 'Get to the door\nto complete ->\nthe level', {fontSize: 14});
         
         // Creates a half block for shrunken tunnel escape
-        this.half_block = temp_level.createFromObjects("object_layer", "half_block", {
+        this.half_block = level_1.createFromObjects("object_layer", "half_block", {
             key: "tileset",
             frame: 9
         }, this);
@@ -88,22 +88,26 @@ class Play extends Phaser.Scene {
         });
 
         // Spawns in boxes
-        const box_spawn1 = temp_level.findObject("object_layer", obj => obj.name === "box_spawn1");
+        const box_spawn1 = level_1.findObject("object_layer", obj => obj.name === "box_spawn1");
         this.block = this.physics.add.sprite(box_spawn1.x, box_spawn1.y,'box');
         this.block.body.setAllowGravity(true);
         this.block.body.immovable = true;
         
-        const box_spawn2 = temp_level.findObject("object_layer", obj => obj.name === "box_spawn2");
+        const box_spawn2 = level_1.findObject("object_layer", obj => obj.name === "box_spawn2");
         this.block2 = this.physics.add.sprite(box_spawn2.x, box_spawn2.y,'box');
         this.block2.body.setAllowGravity(true);
         this.block2.body.immovable = true;
 
         // #region Add Player to game world
-        const player_spawn = temp_level.findObject("object_layer", obj => obj.name === "player_spawn");
+        const player_spawn = level_1.findObject("object_layer", obj => obj.name === "player_spawn");
         this.player = this.physics.add.sprite(player_spawn.x, player_spawn.y,'temp_player');
         this.player.setCollideWorldBounds(true);
         this.player.body.setAllowGravity(true);
         // #endregion
+
+        // setup camera
+        this.cameras.main.setBounds(0, 0, level_1.widthInPixels, level_1.heightInPixels);
+        this.cameras.main.startFollow(this.player, true, 0.25, 0.25); // (target, [,roundPixels][,lerpX][,lerpY])
 
         // set up input
         cursors = this.input.keyboard.createCursorKeys();
@@ -203,7 +207,7 @@ class Play extends Phaser.Scene {
             this.block2.body.immovable = true;
         }
         // Collision logic for box
-        if(this.player.body.touching.left) {
+        if(this.player.body.blocking) {
             if(this.grown) {
                 //this.block.body.setAccelerationX(-this.ACCELERATION);
             } 
