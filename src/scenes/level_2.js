@@ -174,18 +174,36 @@ class level_2 extends Phaser.Scene {
         // Grow powerup overlap check
         this.physics.add.overlap(this.player, this.grow_group, (obj1, obj2) => {
             obj2.destroy(); // remove grow powerup
-            this.sound.play("grow_sound", {volume: 0.1});
-            this.player.setScale(2);
             this.grown = true;
+            this.shrunk = false;
+            this.sound.play("grow_sound", {volume: 0.1});
+            let grow_tween = this.tweens.add({
+                targets: this.player,
+                scale: {from: 1, to: 2},
+                duration: 200,
+                repeat: 0,
+                yoyo: false,
+            });
+            //this.player.setScale(2);
+            
             this.block.body.immovable = false;
         });
 
         // Shrink powerup overlap check
         this.physics.add.overlap(this.player, this.shrink_group, (obj1, obj2) => {
             obj2.destroy(); // remove shrink powerup
-            this.sound.play("shrink_sound", {volume: 0.1})
-            this.player.setScale(0.5);
             this.shrunk = true;
+            this.grown = false;
+            this.sound.play("shrink_sound", {volume: 0.1})
+            let shrink_tween = this.tweens.add({
+                targets: this.player,
+                scale: {from: 1, to: 0.5},
+                duration: 200,
+                repeat: 0,
+                yoyo: false,
+            });
+            
+            this.grow = false;
             this.block.body.immovable = true;
         });
 
@@ -243,7 +261,23 @@ class level_2 extends Phaser.Scene {
         // Reset Scale
         if(Phaser.Input.Keyboard.JustDown(key_d)) {
             //console.log(this.grown);
-            this.player.setScale(1);
+            if(this.shrunk) {
+                let small_to_normal_tween = this.tweens.add({
+                    targets: this.player,
+                    scale: {from: 0.5, to: 1},
+                    duration: 200,
+                    repeat: 0,
+                    yoyo: false,
+                });
+            } else if (this.grown) {
+                let grow_to_normal_tween = this.tweens.add({
+                    targets: this.player,
+                    scale: {from: 2, to: 1},
+                    duration: 200,
+                    repeat: 0,
+                    yoyo: false,
+                });
+            }
             this.grown = false;
             this.shrunk = false;
             this.block.body.immovable = true;
