@@ -9,13 +9,13 @@ class level_2 extends Phaser.Scene {
         this.acceleration = 200;
         this.drag = 7000;
         this.jump_vel = -450;
-        this.physics.world.gravity.y = 2000;
+        this.physics.world.gravity.y = 1500;
         this.shrunk = false;
         this.grown = false;
         this.breakable = true;
         this.button_pressed = true;
         this.unlock = false;
-        //this.physics.world.TILE_BIAS = 10000;
+        
 
         // Load Map
         // Create the level

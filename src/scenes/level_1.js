@@ -9,13 +9,14 @@ class level_1 extends Phaser.Scene {
         this.acceleration = 200;
         this.drag = 7000;
         this.jump_vel = -450;
-        this.physics.world.gravity.y = 2000;
+        this.physics.world.gravity.y = 1500;
         this.shrunk = false;
         this.grown = false;
         this.unlock = false;
+        
         // Load Map
         // Create the level
-        const level_1 = this.add.tilemap("level_temp");
+        const level_1 = this.add.tilemap("level_1");
         // Add the tileset to the map
         const tileset = level_1.addTilesetImage("tileset");
         // Create tilemap layers
@@ -132,19 +133,19 @@ class level_1 extends Phaser.Scene {
         });
 
         // Spawns in boxes
-        const box_spawn1 = level_1.findObject("object_layer", obj => obj.name === "box_spawn1");
+        const box_spawn1 = level_1.findObject("object_layer", obj => obj.name === "box_spawn_1");
         this.block = this.physics.add.sprite(box_spawn1.x, box_spawn1.y,'box');
         this.block.body.setAllowGravity(true);
         this.block.body.immovable = true;
         
-        const box_spawn2 = level_1.findObject("object_layer", obj => obj.name === "box_spawn2");
+        const box_spawn2 = level_1.findObject("object_layer", obj => obj.name === "box_spawn_2");
         this.block2 = this.physics.add.sprite(box_spawn2.x, box_spawn2.y,'box');
         this.block2.body.setAllowGravity(true);
         this.block2.body.immovable = true;
 
         // #region Add Player to game world
         const player_spawn = level_1.findObject("object_layer", obj => obj.name === "player_spawn");
-        this.player = this.physics.add.sprite(player_spawn.x, player_spawn.y,'temp_player');
+        this.player = this.physics.add.sprite(player_spawn.x, player_spawn.y,'player');
         this.player.setCollideWorldBounds(true);
         this.player.body.setAllowGravity(true);
         // #endregion

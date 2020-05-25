@@ -22,8 +22,8 @@ let config = {
     physics: {
         default: 'arcade',
         arcade: {
-            //debug: true,
-            TILE_BIAS: 32,
+            debug: true,
+            TILE_BIAS: 64,
             gravity: {
                 x: 0,
                 y: 0
