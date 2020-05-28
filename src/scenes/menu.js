@@ -30,7 +30,7 @@ class menu extends Phaser.Scene {
         // Takes you to the first level
         if(Phaser.Input.Keyboard.JustDown(key_right)) {
             this.sound.play('menu_select');
-            this.scene.start("level_1_scene");
+            this.scene.start("level_3_scene");
         }
     }
 }

@@ -8,7 +8,15 @@ class load extends Phaser.Scene {
         this.load.path = "./assets/sprites/";
         this.load.image('player', 'player.png');
         this.load.image('box', 'box.png');
+        this.load.image('open_door', 'open_door.png');
+        this.load.image('locked_door', 'closed_door.png');
         this.load.image('big_button', 'big_boy_button.png');
+        this.load.image('grow_power', 'grow.png');
+        this.load.image('shrink_power', 'shrink.png');
+        this.load.image('key', 'key.png');
+        this.load.image('background_level_1', 'background_level_1.png');
+        this.load.image('background_level_2', 'background_level_2.png');
+        
         // Load tilemap and spritesheet
         this.load.path = "./assets/levels/";
         this.load.spritesheet("tileset", "tileset.png", {
@@ -17,6 +25,7 @@ class load extends Phaser.Scene {
         });
         this.load.tilemapTiledJSON("level_1", "level_1.json");
         this.load.tilemapTiledJSON("level_2", "level_2.json");
+        this.load.tilemapTiledJSON("level_3", "level_3.json");
 
         // Load game audio
         this.load.path = "./assets/audio/";

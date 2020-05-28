@@ -18,7 +18,7 @@ let config = {
     scale: {
         autoCenter: Phaser.Scale.CENTER_BOTH
     },
-    scene: [load, menu, level_1, level_2, end_game],
+    scene: [load, menu, level_1, level_2, level_3, end_game],
     physics: {
         default: 'arcade',
         arcade: {

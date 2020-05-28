@@ -6,16 +6,18 @@ class level_2 extends Phaser.Scene {
     create() {
         // Variables and Settings 
         this.max_y_vel = 200;
-        this.acceleration = 200;
+        this.acceleration = 170;
         this.drag = 7000;
-        this.jump_vel = -450;
+        this.jump_vel = -350;
         this.physics.world.gravity.y = 1500;
         this.shrunk = false;
         this.grown = false;
         this.breakable = true;
         this.button_pressed = true;
         this.unlock = false;
-        
+        this.box_is_pushable = false;
+
+        this.background = this.add.image(centerX + 45, centerY + 10, 'background_level_2');
 
         // Load Map
         // Create the level
@@ -23,7 +25,7 @@ class level_2 extends Phaser.Scene {
         // Add the tileset to the map
         const tileset = level_2.addTilesetImage("tileset");
         // Create tilemap layers
-        const background_layer = level_2.createStaticLayer("background_layer", tileset, 0 ,0);
+        //const background_layer = level_2.createStaticLayer("background_layer", tileset, 0 ,0);
         const platform_layer = level_2.createStaticLayer("platform_layer", tileset, 0 ,0);
         const breakable_walls = level_2.createStaticLayer("breakable_walls", tileset, 0 ,0);
         const button_wall = level_2.createStaticLayer("button_wall", tileset, 0 ,0);
@@ -35,38 +37,26 @@ class level_2 extends Phaser.Scene {
         
         // Spawns Tilemap Objects
         // Spawns shrink powerup
-        this.shrink_powerup = level_2.createFromObjects("object_layer", "shrink_powerup", {
-            key: "tileset",
-            frame: 7
-        }, this);
-        this.physics.world.enable(this.shrink_powerup, Phaser.Physics.Arcade.STATIC_BODY);
-
-        this.shrink_powerup.map((shrink_powerup) => {
-            shrink_powerup.body.setCircle(5).setOffset(3, 3); 
-        });
-
-        this.shrink_group = this.add.group(this.shrink_powerup);
+        this.shrink_spawn = level_2.findObject("object_layer", obj => obj.name === "shrink_powerup");
+        this.shrink_powerup = new shrink_powerup(this, this.shrink_spawn.x, this.shrink_spawn.y);
 
         // Spawns grow powerup
-        this.grow_powerup = level_2.createFromObjects("object_layer", "grow_powerup", {
-            key: "tileset",
-            frame: 6
-        }, this);
-        this.physics.world.enable(this.grow_powerup, Phaser.Physics.Arcade.STATIC_BODY);
-    
-        this.grow_powerup.map((grow_power_up) => {
-            grow_power_up.body.setCircle(5).setOffset(3, 3); 
-        });
-
-        this.grow_group = this.add.group(this.grow_powerup);
+        this.grow_spawn = level_2.findObject("object_layer", obj => obj.name === "grow_powerup");
+        this.grow_powerup = new grow_powerup(this, this.grow_spawn.x, this.grow_spawn.y);
 
         //this.physics.world.bounds.setTo(0, 0, level_2.widthInPixels, level_2.heightInPixels);
         // Spawns exit door
-        this.door = level_2.createFromObjects("object_layer", "door", {
-            key: "tileset",
-            frame: 3
-        }, this);
-        this.physics.world.enable(this.door, Phaser.Physics.Arcade.STATIC_BODY);
+        
+        this.open_door_spawn = level_2.findObject("object_layer", obj => obj.name === "open_door");
+        this.open_door = new door(this, this.open_door_spawn.x, this.open_door_spawn.y - 15, 'open_door');
+
+        this.closed_door_spawn = level_2.findObject("object_layer", obj => obj.name === "door");
+        this.closed_door = new door(this, this.closed_door_spawn.x, this.closed_door_spawn.y - 15, 'locked_door');
+        // this.door = level_2.createFromObjects("object_layer", "door", {
+        //     key: "tileset",
+        //     frame: 3
+        // }, this);
+        // this.physics.world.enable(this.door, Phaser.Physics.Arcade.STATIC_BODY);
 
         this.door_group = this.add.group(this.door);
 
@@ -113,21 +103,21 @@ class level_2 extends Phaser.Scene {
         });
 
         // Spawns in boxes
-        const box_spawn = level_2.findObject("object_layer", obj => obj.name === "box_spawn");
-        this.block = this.physics.add.sprite(box_spawn.x, box_spawn.y,'box');
-        this.block.body.setAllowGravity(true);
-        this.block.body.immovable = true;
+        const box_spawn_1 = level_2.findObject("object_layer", obj => obj.name === "box_spawn");
+        this.box_1 = new box(this, box_spawn_1.x, box_spawn_1.y);
+        //this.box_1.body.setAllowGravity(true);
+        this.box_1.body.immovable = true;
         
         //Spawn on big button
         const big_button_spawn = level_2.findObject("object_layer", obj => obj.name === "big_button_spawn");
         this.big_button = this.physics.add.sprite(big_button_spawn.x, big_button_spawn.y, 'big_button');
         this.big_button.body.setAllowGravity(false);
         this.big_button.body.immovable = true;
-        this.big_button.body.setSize(32,16).setOffset(0, 16);
+        this.big_button.body.setSize(32,28).setOffset(0, 5);
 
         // #region Add Player to game world
         const player_spawn = level_2.findObject("object_layer", obj => obj.name === "player_spawn");
-        this.player = this.physics.add.sprite(player_spawn.x, player_spawn.y,'temp_player');
+        this.player = this.physics.add.sprite(player_spawn.x, player_spawn.y,'player');
         this.player.body.setAllowGravity(true);
         // #endregion
 
@@ -146,10 +136,10 @@ class level_2 extends Phaser.Scene {
         // R for reset
         key_r = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
 
-        // Physics collider
-        this.physics.add.collider(this.player, this.block);
+        // Physics colliders
+        this.physics.add.collider(this.player, this.box_1);
         this.physics.add.collider(this.player, platform_layer);
-        this.physics.add.collider(this.block, platform_layer);
+        this.physics.add.collider(this.box_1, platform_layer);
         this.button_collider = this.physics.add.collider(this.player, button_wall);
         this.big_button_collider = this.physics.add.collider(this.player, breakable_walls);
         this.physics.add.collider(this.player, this.big_button);
@@ -162,7 +152,7 @@ class level_2 extends Phaser.Scene {
                 this.button_collider.destroy();
             }
         });
-        this.physics.add.collider(this.block, this.big_button, (obj1, obj2) => {
+        this.physics.add.collider(this.box_1, this.big_button, (obj1, obj2) => {
             if(this.breakable) {
                 this.breakable = false;
                 breakable_walls.destroy();
@@ -172,7 +162,7 @@ class level_2 extends Phaser.Scene {
         
         // Overlap checkers
         // Grow powerup overlap check
-        this.physics.add.overlap(this.player, this.grow_group, (obj1, obj2) => {
+        this.physics.add.overlap(this.player, this.grow_powerup, (obj1, obj2) => {
             obj2.destroy(); // remove grow powerup
             this.grown = true;
             this.shrunk = false;
@@ -186,11 +176,11 @@ class level_2 extends Phaser.Scene {
             });
             //this.player.setScale(2);
             
-            this.block.body.immovable = false;
+            this.box_1.body.immovable = false;
         });
 
         // Shrink powerup overlap check
-        this.physics.add.overlap(this.player, this.shrink_group, (obj1, obj2) => {
+        this.physics.add.overlap(this.player, this.shrink_powerup, (obj1, obj2) => {
             obj2.destroy(); // remove shrink powerup
             this.shrunk = true;
             this.grown = false;
@@ -204,20 +194,21 @@ class level_2 extends Phaser.Scene {
             });
             
             this.grow = false;
-            this.block.body.immovable = true;
+            this.box_1.body.immovable = true;
         });
 
         // Door powerup overlap check
-        this.physics.add.overlap(this.player, this.door_group, (obj1, obj2) => {
+        this.physics.add.overlap(this.player, this.closed_door, (obj1, obj2) => {
             if(this.unlock) {
                 this.sound.play("level_complete", {volume: 0.1});
-                this.scene.start("end_game_scene");
+                this.scene.start("level_3_scene");
             }
         });
 
         // Key overlap check
         this.physics.add.overlap(this.player, this.key, (obj1, obj2) => {
             obj2.destroy(); // remove key
+            this.closed_door.setTexture('open_door');
             this.unlock = true;
         });
     }
@@ -240,24 +231,7 @@ class level_2 extends Phaser.Scene {
             this.player.body.setVelocityY(this.jump_vel);
             this.sound.play('jump_sound', {volume: 0.1});
         }
-
-        //if(this.physics.collide(this.block, this.big_button))
         
-        // Buttons for shrink and grow for debug purposes
-
-        // if(Phaser.Input.Keyboard.JustDown(keyS) && !this.shrunk) {
-        //     this.player.setScale(0.5);
-        //     this.shrunk = true;
-        //     this.block.body.immovable = false;
-        // }
-
-        // if(Phaser.Input.Keyboard.JustDown(keyG)) {
-        //     this.player.setScale(2);
-        //     this.grown = true;
-        //     this.block.body.immovable = false;
-        //     //console.log(this.grown);
-        // }
-
         // Reset Scale
         if(Phaser.Input.Keyboard.JustDown(key_d)) {
             //console.log(this.grown);
@@ -270,7 +244,7 @@ class level_2 extends Phaser.Scene {
                     yoyo: false,
                 });
             } else if (this.grown) {
-                let grow_to_normal_tween = this.tweens.add({
+                let grown_to_normal_tween = this.tweens.add({
                     targets: this.player,
                     scale: {from: 2, to: 1},
                     duration: 200,
@@ -280,17 +254,16 @@ class level_2 extends Phaser.Scene {
             }
             this.grown = false;
             this.shrunk = false;
-            this.block.body.immovable = true;
+            this.box_1.body.immovable = true;
         }
-        // Collision logic for box
         if(this.player.body.blocking) {
             if(this.grown) {
-                //this.block.body.setAccelerationX(-this.ACCELERATION);
+                //this.box_1.body.setAccelerationX(-this.ACCELERATION);
             } 
         }
         else {
-            this.block.body.setAccelerationX(0);
-            this.block.body.setDragX(this.drag);
+            this.box_1.body.setAccelerationX(0);
+            this.box_1.body.setDragX(this.drag);
         }
         
         // Reset level
