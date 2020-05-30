@@ -18,8 +18,8 @@ class end_game extends Phaser.Scene {
         }
 
         // End Game Text
-        this.add.text(centerX, centerY - 70, 'Congratulations!!', menuConfig).setOrigin(0.5);
-        this.add.text(centerX, centerY, 'Press M for menu      \nPress R to play level again', menuConfig).setOrigin(0.5);
+        this.add.text(center_x, center_y - 70, 'Congratulations!!', menuConfig).setOrigin(0.5);
+        this.add.text(center_x, center_y, 'Press M for menu      \nPress R to play level again', menuConfig).setOrigin(0.5);
         menuConfig.backgroundColor = '#00FF00';
         menuConfig.color = '#000';
 

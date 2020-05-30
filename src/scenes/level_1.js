@@ -14,7 +14,7 @@ class level_1 extends Phaser.Scene {
         this.unlock = false;
         this.box_is_pushable = false;
         
-        this.background = this.add.image(centerX, centerY, 'background_level_1');
+        this.background = this.add.image(center_x, center_y, 'background_level_1');
 
         // Load Map
         // Create the level

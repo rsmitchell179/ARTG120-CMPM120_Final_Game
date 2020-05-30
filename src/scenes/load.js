@@ -34,6 +34,13 @@ class load extends Phaser.Scene {
         this.load.audio("level_complete", "LevelComplete.wav");
         this.load.audio("shrink_sound", "ShrinkPowerup.wav");
         this.load.audio("menu_select", "Menu_Select.wav");
+
+        // Load font 
+        // Font made by ShyFoundry Fonts from 1001fonts.com
+        this.load.path = "./assets/font/";
+        this.load.bitmapFont('font', 'font.png', 'font.fnt');
+        this.load.bitmapFont('real_font', 'real_font.png', 'real_font.fnt');
+        this.load.bitmapFont('smaller_font', 'smaller_font.png', 'smaller_font.fnt');
     }
 
     update() {
