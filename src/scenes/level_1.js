@@ -14,6 +14,7 @@ class level_1 extends Phaser.Scene {
         this.unlock = false;
         this.box_is_pushable = false;
         
+        // Add background image 
         this.background = this.add.image(center_x, center_y, 'background_level_1');
 
         // Load Map
@@ -27,24 +28,24 @@ class level_1 extends Phaser.Scene {
         // Set map collisions
         platform_layer.setCollisionByProperty({collides: true });
 
-        // Spawns Tilemap Objects
+        // -----------------------Spawns Tilemap Objects-----------------------------------------------------------
 
         // Spawns shrink powerup
         this.shrink_spawn = level_1.findObject("object_layer", obj => obj.name === "shrink_powerup");
         this.shrink_powerup = new shrink_powerup(this, this.shrink_spawn.x, this.shrink_spawn.y);
         //this.shrink_group = this.add.group(this.shrink_powerup);
         
-        // Spawns second powerup with individual text logics
+        // Spawns second shrink powerup with individual text logics
         this.shrink_spawn_2 = level_1.findObject("object_layer", obj => obj.name === "shrink_powerup_2");
         this.shrink_powerup_2 = new shrink_powerup(this, this.shrink_spawn_2.x, this.shrink_spawn_2.y);
 
-        // Spawns grow powerup
+        // Spawns grow powerup 1
         this.grow_spawn = level_1.findObject("object_layer", obj => obj.name === "grow_powerup");
         this.grow_powerup = new grow_powerup(this, this.grow_spawn.x, this.grow_spawn.y);
 
+        // Spawns second grow powerup with individual text logics
         this.grow_spawn_2 = level_1.findObject("object_layer", obj => obj.name === "grow_powerup_2");
         this.grow_powerup_2 = new grow_powerup(this, this.grow_spawn_2.x, this.grow_spawn_2.y);
-
 
         // Creates a half block for shrunken tunnel escape
         this.half_wall = level_1.createFromObjects("object_layer", "half_wall", {
@@ -57,8 +58,6 @@ class level_1 extends Phaser.Scene {
         this.half_wall.map((half_wall) => {
             half_wall.body.setSize(3, 15).setOffset(1, 1);
         });
-        
-        //this.physics.world.bounds.setTo(0, 0, level_1.widthInPixels, level_1.heightInPixels);
         
         // Spawns exit door
         this.closed_door_spawn = level_1.findObject("object_layer", obj => obj.name === "door");
@@ -88,15 +87,8 @@ class level_1 extends Phaser.Scene {
         });
 
         // Spawn in key
-        this.key = level_1.createFromObjects("object_layer", "key_spawn", {
-            key: "tileset",
-            frame: 11
-        }, this);
-        this.physics.world.enable(this.key, Phaser.Physics.Arcade.STATIC_BODY);
-
-        this.key.map((key) => {
-            key.body.setCircle(3).setOffset(3, 5); 
-        });
+        this.key_spawn = level_1.findObject("object_layer", obj => obj.name === "key_spawn");
+        this.key = new key(this, this.key_spawn.x, this.key_spawn.y - 10);
 
         // Spawns in boxes
         const box_spawn_1 = level_1.findObject("object_layer", obj => obj.name === "box_spawn_1");

@@ -31,6 +31,8 @@ class level_3 extends Phaser.Scene {
         this.grow_powerup_2_exists = true;
         this.shrink_powerup_exists = true;
         this.key_exists = true;
+        this.checkpoint_overlap_1 = true;
+        this.checkpoint_overlap_2 = true;
 
         // Load Map
         // Create the level
@@ -53,7 +55,7 @@ class level_3 extends Phaser.Scene {
         // Get height of level 3
         this.height_of_level = level_3.heightInPixels;
        
-        // Spawns Tilemap Objects
+        // ----------------------------Spawns Tilemap Objects----------------------------------------
 
         // Spawns shrink powerup
         this.shrink_spawn = level_3.findObject("object_layer", obj => obj.name === "shrink_powerup");
@@ -63,42 +65,22 @@ class level_3 extends Phaser.Scene {
         this.grow_spawn = level_3.findObject("object_layer", obj => obj.name === "grow_powerup");
         this.grow_powerup = new grow_powerup(this, this.grow_spawn.x, this.grow_spawn.y);
 
+        // spawns second grow powerup for part 4 of level 3
         this.grow_spawn_2 = level_3.findObject("object_layer", obj => obj.name === "grow_powerup_2");
         this.grow_powerup_2 = new grow_powerup(this, this.grow_spawn_2.x, this.grow_spawn_2.y);
 
-        // Spawns in 1st checkpoint
-        this.checkpoint_1 = level_3.createFromObjects("object_layer", "checkpoint_1", { 
-            key: "tileset",
-            frame: 17
-        }, this);
-        this.physics.world.enable(this.checkpoint_1, Phaser.Physics.Arcade.STATIC_BODY);
-
-        this.checkpoint_1.map((checkpoint_hitbox) => {
-            checkpoint_hitbox.body.setSize(9, 16).setOffset(7, 0);
-        });
+        // Spawns in checkpoint 1 for part 2 of level 3
+        this.checkpoint_1_spawn = level_3.findObject("object_layer", obj => obj.name === "checkpoint_1");
+        this.checkpoint_1 = new checkpoint(this, this.checkpoint_1_spawn.x, this.checkpoint_1_spawn.y - 8, 'checkpoint_flag_down');
         
-        // Spawns in 2nd checkpoint
-        this.checkpoint_2 = level_3.createFromObjects("object_layer", "checkpoint_2", { 
-            key: "tileset",
-            frame: 17
-        }, this);
-        this.physics.world.enable(this.checkpoint_2, Phaser.Physics.Arcade.STATIC_BODY);
-
-        this.checkpoint_2.map((checkpoint_hitbox) => {
-            checkpoint_hitbox.body.setSize(9, 16).setOffset(7, 0);
-        });
-
-        // Spawns in 3rd checkpoint
-        this.checkpoint_3 = level_3.createFromObjects("object_layer", "checkpoint_3", { 
-            key: "tileset",
-            frame: 17
-        }, this);
-        this.physics.world.enable(this.checkpoint_3, Phaser.Physics.Arcade.STATIC_BODY);
-
-        this.checkpoint_3.map((checkpoint_hitbox) => {
-            checkpoint_hitbox.body.setSize(9, 16).setOffset(7, 0);
-        });
-
+        // Spawns in checkpoint 2 for part 3 of level 3 
+        this.checkpoint_2_spawn = level_3.findObject("object_layer", obj => obj.name === "checkpoint_2");
+        this.checkpoint_2 = new checkpoint(this, this.checkpoint_2_spawn.x, this.checkpoint_2_spawn.y - 8, 'checkpoint_flag_down');
+        
+        // Spawns in checkpoint 3 for part 4 of level 3
+        this.checkpoint_3_spawn = level_3.findObject("object_layer", obj => obj.name === "checkpoint_3");
+        this.checkpoint_3 = new checkpoint(this, this.checkpoint_3_spawn.x, this.checkpoint_3_spawn.y - 8, 'checkpoint_flag_down');
+       
         // Spawns exit door
         this.door = level_3.createFromObjects("object_layer", "door", {
             key: "tileset",
@@ -108,27 +90,13 @@ class level_3 extends Phaser.Scene {
 
         this.door_group = this.add.group(this.door);
 
-        // Spawns player activated button for first part of level
-        this.button_1 = level_3.createFromObjects("object_layer", "button_1", {
-            key: "tileset",
-            frame: 10
-        }, this);
-        this.physics.world.enable(this.button_1, Phaser.Physics.Arcade.STATIC_BODY);
-       
-        this.button_1.map((button) => {
-            button.body.setSize(16, 8).setOffset(0, 8);
-        });
+        // Spawns in player activated button in the first part of the level
+        this.button_1_spawn = level_3.findObject("object_layer", obj => obj.name === "button_1");
+        this.button_1 = new small_button(this, this.button_1_spawn.x, this.button_1_spawn.y - 8, 'orange_button_up');
 
-        // Spawns player activated button for first part of level
-        this.button_2 = level_3.createFromObjects("object_layer", "button_2", {
-            key: "tileset",
-            frame: 10
-        }, this);
-        this.physics.world.enable(this.button_2, Phaser.Physics.Arcade.STATIC_BODY);
-       
-        this.button_2.map((button) => {
-            button.body.setSize(16, 8).setOffset(0, 8);
-        });
+        // Spawns in player activated button in the third part of the level
+        this.button_2_spawn = level_3.findObject("object_layer", obj => obj.name === "button_2");
+        this.button_2 = new small_button(this, this.button_2_spawn.x + 8, this.button_2_spawn.y - 8, 'orange_button_up');
 
         // Spawns spikes in the level
         this.spikes = level_3.createFromObjects("object_layer", "spike", {
@@ -154,6 +122,7 @@ class level_3 extends Phaser.Scene {
         }, this);
         this.physics.world.enable(this.half_left_wall, Phaser.Physics.Arcade.STATIC_BODY);
 
+        // Adds half_left_wall to a group for hitboxes 
         this.half_left_group = this.add.group(this.half_left_wall);
         this.half_left_wall.map((half_left_wall) => {
             half_left_wall.body.setSize(3, 15).setOffset(1, 1);
@@ -166,6 +135,7 @@ class level_3 extends Phaser.Scene {
         }, this);
         this.physics.world.enable(this.half_floor, Phaser.Physics.Arcade.STATIC_BODY);
 
+        // Add half_floor to a group for hitboxes
         this.half_floor_group = this.add.group(this.half_floor);
         this.half_floor.map((half_floor) => {
             half_floor.body.setSize(16, 8).setOffset(0, 8);
@@ -178,24 +148,19 @@ class level_3 extends Phaser.Scene {
         }, this);
         this.physics.world.enable(this.half_block, Phaser.Physics.Arcade.STATIC_BODY);
 
+        // Adds half_blocks to a group for hitboxes
         this.half_block_group = this.add.group(this.half_block);
         this.half_block.map((half_block) => {
             half_block.body.setSize(16, 8).setOffset(0, -1)
         });
 
-        //Spawn on big button for second part of level
-        const big_button_spawn = level_3.findObject("object_layer", obj => obj.name === "big_button_spawn");
-        this.big_button = this.physics.add.sprite(big_button_spawn.x, big_button_spawn.y, 'big_button');
-        this.big_button.body.setAllowGravity(false);
-        this.big_button.body.immovable = true;
-        this.big_button.body.setSize(32,28).setOffset(0, 5);
+        //Spawns a big button for second part of level
+        this.big_button_1_spawn = level_3.findObject("object_layer", obj => obj.name === "big_button_spawn");
+        this.big_button = new big_button(this, this.big_button_1_spawn.x, this.big_button_1_spawn.y, 'big_button_up');
 
-        //Spawn on big button for second part of level
-        const big_button_spawn_2 = level_3.findObject("object_layer", obj => obj.name === "big_button_spawn_2");
-        this.big_button_2 = this.physics.add.sprite(big_button_spawn_2.x, big_button_spawn_2.y, 'big_button');
-        this.big_button_2.body.setAllowGravity(false);
-        this.big_button_2.body.immovable = true;
-        this.big_button_2.body.setSize(32,28).setOffset(0, 5);
+        //Spawns a big button for the last part of level
+        this.big_button_2_spawn = level_3.findObject("object_layer", obj => obj.name === "big_button_spawn_2");
+        this.big_button_2 = new big_button(this, this.big_button_2_spawn.x, this.big_button_2_spawn.y, 'big_button_up');
 
         // Spawns in boxes
         const box_spawn = level_3.findObject("object_layer", obj => obj.name === "box_spawn_1");
@@ -211,21 +176,10 @@ class level_3 extends Phaser.Scene {
         //this.block_2.body.setAllowGravity(true);
         this.block_2.body.immovable = true;
 
-        // Spawns player activated button for third part of level
-        this.button_2 = level_3.createFromObjects("object_layer", "button_2", {
-            key: "tileset",
-            frame: 10
-        }, this);
-        this.physics.world.enable(this.button_2, Phaser.Physics.Arcade.STATIC_BODY);
-       
-        this.button_2.map((button) => {
-            button.body.setSize(16, 8).setOffset(0, 8);
-        });
-
         // #region Add Player to game world
         const player_spawn = level_3.findObject("object_layer", obj => obj.name === "player_spawn");
-        this.player_X = player_spawn.x;//player_spawn.x;
-        this.player_Y = player_spawn.y;//player_spawn.y;
+        this.player_X = player_spawn.x;
+        this.player_Y = player_spawn.y;
         this.player = this.physics.add.sprite(this.player_X, this.player_Y,'player');
         this.player.body.setAllowGravity(true);
         // #endregion
@@ -260,6 +214,8 @@ class level_3 extends Phaser.Scene {
         this.physics.add.collider(this.block, this.big_button, (obj1, obj2) => {
             if(this.breakable_1) {
                 this.breakable_1 = false;
+                this.big_button.setTexture('big_button_down');
+                this.big_button.body.setSize(32,14).setOffset(0, 18);
                 button_2_wall.destroy();
                 this.big_button_collider.destroy();
             }
@@ -268,6 +224,8 @@ class level_3 extends Phaser.Scene {
             if(this.breakable_2) {
                 const spawn_platform = level_3.createStaticLayer("spawn_platform", tileset, 0, 0);
                 spawn_platform.setCollisionByProperty({collides: true });
+                this.big_button_2.setTexture('big_button_down');
+                this.big_button_2.body.setSize(32,14).setOffset(0, 18);
                 this.spawn_spikes = level_3.createFromObjects("spawn_spikes", "spike", {
                     key: "tileset",
                     frame: 16
@@ -282,18 +240,23 @@ class level_3 extends Phaser.Scene {
                });
                this.breakable_2 = false;
             }
+            //this.block_2.body.setAllowGravity(false);
         });
 
         this.physics.add.collider(this.player, this.button_1, (obj1, obj2) => {
-            if(this.button_1_pressed) {
+            if(this.button_1_pressed && this.player.body.touching.down) {
                 this.button_1_pressed = false;
+                this.button_1.setTexture('orange_button_down');
+                this.button_1.body.setSize(16, 7).setOffset(0, 8);
                 button_1_wall.destroy();
                 this.button_1_collider.destroy();
             }
         });
         this.physics.add.collider(this.player, this.button_2, (obj1, obj2) => {
-            if(this.button_2_pressed) {
+            if(this.button_2_pressed && this.player.body.touching.down) {
                 this.button_2_pressed = false;
+                this.button_2.setTexture('orange_button_down');
+                this.button_2.body.setSize(16, 7).setOffset(0, 8);
                 key_wall.destroy();
                 this.button_2_collider.destroy();
             }
@@ -380,25 +343,36 @@ class level_3 extends Phaser.Scene {
         });
 
         // Chekpoint 1 overlap
-        this.physics.add.overlap(this.player, this.checkpoint_1, (obj1, obj2) => {
+        this.checkpoint_1_overlap = this.physics.add.overlap(this.player, this.checkpoint_1, (obj1, obj2) => {
             const checkpoint_1_spawn = level_3.findObject("object_layer", obj => obj.name === "checkpoint_1");
+            this.checkpoint_1.setTexture('checkpoint_flag_up');
             this.checkpoint = 1;
             this.player_X = checkpoint_1_spawn.x;
             this.player_Y = checkpoint_1_spawn.y;
         });
         // Checkpoint 2 overlap
-        this.physics.add.overlap(this.player, this.checkpoint_2, (obj1, obj2) => {
+        this.checkpoint_2_overlap = this.physics.add.overlap(this.player, this.checkpoint_2, (obj1, obj2) => {
             const checkpoint_2_spawn = level_3.findObject("object_layer", obj => obj.name === "checkpoint_2");
+            this.checkpoint_2.setTexture('checkpoint_flag_up');
             this.checkpoint = 2;
             this.player_X = checkpoint_2_spawn.x;
             this.player_Y = checkpoint_2_spawn.y;
+            if(this.checkpoint_overlap_1){
+                this.checkpoint_1_overlap.destroy();
+                this.checkpoint_overlap_1 = false;
+            };
         });
        // Checkpoint 3 overlap
-       this.physics.add.overlap(this.player, this.checkpoint_3, (obj1, obj2) => {
+       this.checkpoint_3_overlap = this.physics.add.overlap(this.player, this.checkpoint_3, (obj1, obj2) => {
         const checkpoint_3_spawn = level_3.findObject("object_layer", obj => obj.name === "checkpoint_3");
+        this.checkpoint_3.setTexture('checkpoint_flag_up');
         this.checkpoint = 3;
         this.player_X = checkpoint_3_spawn.x;
         this.player_Y = checkpoint_3_spawn.y;
+        if(this.checkpoint_overlap_2){
+            this.checkpoint_2_overlap.destroy();
+            this.checkpoint_overlap_2 = false;
+        }
         });
     }
 
@@ -421,10 +395,10 @@ class level_3 extends Phaser.Scene {
             this.sound.play('jump_sound', {volume: 0.1});
         }
 
-        if(Phaser.Input.Keyboard.JustDown(cursors.up)) {
-            this.player.body.setVelocityY(this.jump_vel);
-            this.sound.play('jump_sound', {volume: 0.1});
-        }
+        // if(Phaser.Input.Keyboard.JustDown(cursors.up)) {
+        //     this.player.body.setVelocityY(this.jump_vel);
+        //     this.sound.play('jump_sound', {volume: 0.1});
+        // }
 
         // Reset Scale
         if(Phaser.Input.Keyboard.JustDown(key_d)) {

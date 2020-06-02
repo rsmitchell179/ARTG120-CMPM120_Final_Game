@@ -30,6 +30,5 @@ class credits extends Phaser.Scene {
 
     go_menu() {
         go_menu = true;
-        //console.log(this.start);
     }
 }

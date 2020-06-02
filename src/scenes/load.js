@@ -10,10 +10,15 @@ class load extends Phaser.Scene {
         this.load.image('box', 'box.png');
         this.load.image('open_door', 'open_door.png');
         this.load.image('locked_door', 'closed_door.png');
-        this.load.image('big_button', 'big_boy_button.png');
+        this.load.image('big_button_up', 'big_boy_button_up.png');
+        this.load.image('big_button_down', 'big_boy_button_down.png');
         this.load.image('grow_power', 'grow.png');
         this.load.image('shrink_power', 'shrink.png');
         this.load.image('key', 'key.png');
+        this.load.image('checkpoint_flag_up', 'active_checkpoint.png');
+        this.load.image('checkpoint_flag_down', 'inactive_checkpoint.png');
+        this.load.image('orange_button_up', 'orange_button_up.png');
+        this.load.image('orange_button_down', 'orange_button_down.png');
         this.load.image('background_level_1', 'background_level_1.png');
         this.load.image('background_level_2', 'background_level_2.png');
         

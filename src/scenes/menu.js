@@ -36,7 +36,6 @@ class menu extends Phaser.Scene {
         //console.log("GASRASDFGSD");
         //console.log(this.start);
         if(start) {
-            console.log('here');
             this.sound.play('menu_select');
             this.scene.start("level_1_scene");
         }

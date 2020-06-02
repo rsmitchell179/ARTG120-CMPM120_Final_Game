@@ -48,47 +48,21 @@ class level_2 extends Phaser.Scene {
         // Spawns exit door
         
         this.open_door_spawn = level_2.findObject("object_layer", obj => obj.name === "open_door");
-        this.open_door = new door(this, this.open_door_spawn.x, this.open_door_spawn.y - 15, 'open_door');
+        this.open_door = new door(this, this.open_door_spawn.x, this.open_door_spawn.y - 16, 'open_door');
 
         this.closed_door_spawn = level_2.findObject("object_layer", obj => obj.name === "door");
         this.closed_door = new door(this, this.closed_door_spawn.x, this.closed_door_spawn.y - 15, 'locked_door');
-        // this.door = level_2.createFromObjects("object_layer", "door", {
-        //     key: "tileset",
-        //     frame: 3
-        // }, this);
-        // this.physics.world.enable(this.door, Phaser.Physics.Arcade.STATIC_BODY);
+       
 
         this.door_group = this.add.group(this.door);
-
         // Spawns player activated button
-        this.button = level_2.createFromObjects("object_layer", "little_button_spawn", {
-            key: "tileset",
-            frame: 10
-        }, this);
-        this.physics.world.enable(this.button, Phaser.Physics.Arcade.STATIC_BODY);
+        this.button_spawn = level_2.findObject("object_layer", obj => obj.name === "little_button_spawn");
+        this.button = new small_button(this, this.button_spawn.x, this.button_spawn.y - 8, 'orange_button_up');
        
-        this.button.map((button) => {
-            button.body.setSize(16, 8).setOffset(0, 8);
-        });
-
-        // Spawns breakable walls
-        // this.breakable_wall = level_2.createFromObjects("breakable_walls", "breakable_wall", {
-        //     key: "tileset",
-        //     frame: 0
-        // }, this);
-        // this.physics.world.enable(this.breakable_wall, Phaser.Physics.Arcade.STATIC_BODY);
-        // this.breakable_wall_group = this.add.group(this.breakable_wall);
         
-        // Spawns key in spawn location
-        this.key = level_2.createFromObjects("object_layer", "key_spawn", {
-            key: "tileset",
-            frame: 11
-        }, this);
-        this.physics.world.enable(this.key, Phaser.Physics.Arcade.STATIC_BODY);
-
-        this.key.map((key) => {
-            key.body.setCircle(3).setOffset(3, 5); 
-        });
+        this.key_spawn = level_2.findObject("object_layer", obj => obj.name === "key_spawn");
+        this.key = new key(this, this.key_spawn.x, this.key_spawn.y - 10);
+    
         
         // Creates a half block for shrunken tunnel escape
         this.half_wall = level_2.createFromObjects("object_layer", "half_wall", {
@@ -105,15 +79,11 @@ class level_2 extends Phaser.Scene {
         // Spawns in boxes
         const box_spawn_1 = level_2.findObject("object_layer", obj => obj.name === "box_spawn");
         this.box_1 = new box(this, box_spawn_1.x, box_spawn_1.y);
-        //this.box_1.body.setAllowGravity(true);
         this.box_1.body.immovable = true;
         
         //Spawn on big button
-        const big_button_spawn = level_2.findObject("object_layer", obj => obj.name === "big_button_spawn");
-        this.big_button = this.physics.add.sprite(big_button_spawn.x, big_button_spawn.y, 'big_button');
-        this.big_button.body.setAllowGravity(false);
-        this.big_button.body.immovable = true;
-        this.big_button.body.setSize(32,28).setOffset(0, 5);
+        this.big_button_spawn = level_2.findObject("object_layer", obj => obj.name === "big_button_spawn");
+        this.big_button = new big_button(this, this.big_button_spawn.x, this.big_button_spawn.y, 'big_button_up');
 
         // #region Add Player to game world
         const player_spawn = level_2.findObject("object_layer", obj => obj.name === "player_spawn");
@@ -146,8 +116,10 @@ class level_2 extends Phaser.Scene {
         this.physics.add.collider(this.player, this.half_wall);
         this.physics.add.collider(this.player, this.breakable_wall_group);
         this.physics.add.collider(this.player, this.button, (obj1, obj2) => {
-            if(this.button_pressed) {
+            if(this.button_pressed && this.player.body.touching.down) {
                 this.button_pressed = false;
+                this.button.setTexture('orange_button_down');
+                this.button.body.setSize(16, 7).setOffset(0, 10);
                 button_wall.destroy();
                 this.button_collider.destroy();
             }
@@ -155,6 +127,8 @@ class level_2 extends Phaser.Scene {
         this.physics.add.collider(this.box_1, this.big_button, (obj1, obj2) => {
             if(this.breakable) {
                 this.breakable = false;
+                this.big_button.setTexture('big_button_down');
+                this.big_button.body.setSize(32,14).setOffset(0, 18);
                 breakable_walls.destroy();
                 this.big_button_collider.destroy();
             }
