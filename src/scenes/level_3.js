@@ -34,13 +34,14 @@ class level_3 extends Phaser.Scene {
         this.checkpoint_overlap_1 = true;
         this.checkpoint_overlap_2 = true;
 
+        this.background = this.add.image(0, 0, 'background_level_3').setOrigin(0, 0);
+
         // Load Map
         // Create the level
         const level_3 = this.add.tilemap("level_3");
         // Add the tileset to the map
         const tileset = level_3.addTilesetImage("tileset");
         // Create tilemap layers
-        const background_layer = level_3.createStaticLayer("background_layer", tileset, 0, 0);
         const platform_layer = level_3.createStaticLayer("platform_layer", tileset, 0, 0);
         const button_1_wall = level_3.createStaticLayer("button_1_wall", tileset, 0, 0);
         const button_2_wall = level_3.createStaticLayer("button_2_wall", tileset, 0, 0);
@@ -80,15 +81,14 @@ class level_3 extends Phaser.Scene {
         // Spawns in checkpoint 3 for part 4 of level 3
         this.checkpoint_3_spawn = level_3.findObject("object_layer", obj => obj.name === "checkpoint_3");
         this.checkpoint_3 = new checkpoint(this, this.checkpoint_3_spawn.x, this.checkpoint_3_spawn.y - 8, 'checkpoint_flag_down');
-       
-        // Spawns exit door
-        this.door = level_3.createFromObjects("object_layer", "door", {
-            key: "tileset",
-            frame: 3
-        }, this);
-        this.physics.world.enable(this.door, Phaser.Physics.Arcade.STATIC_BODY);
+        
+        //Spawns in closed background door
+        this.open_door_spawn = level_3.findObject("object_layer", obj => obj.name === "open_door");
+        this.open_door = new door(this, this.open_door_spawn.x, this.open_door_spawn.y - 7, 'open_door');
 
-        this.door_group = this.add.group(this.door);
+        // Spawns exit door
+        this.closed_door_spawn = level_3.findObject("object_layer", obj => obj.name === "door");
+        this.closed_door = new door(this, this.closed_door_spawn.x, this.closed_door_spawn.y - 16, 'locked_door');
 
         // Spawns in player activated button in the first part of the level
         this.button_1_spawn = level_3.findObject("object_layer", obj => obj.name === "button_1");
@@ -187,6 +187,7 @@ class level_3 extends Phaser.Scene {
         // setup camera
         this.cameras.main.setBounds(0, 0, level_3.widthInPixels, level_3.heightInPixels);
         this.cameras.main.startFollow(this.player, true, 0.25, 0.25); // (target, [,roundPixels][,lerpX][,lerpY])
+        this.cameras.main.setZoom(2);
 
         // set up input
         cursors = this.input.keyboard.createCursorKeys();
@@ -211,6 +212,7 @@ class level_3 extends Phaser.Scene {
         this.physics.add.collider(this.player, this.half_block);
         this.physics.add.collider(this.player, this.half_floor);
         this.physics.add.collider(this.player, this.half_left_wall);
+        
         this.physics.add.collider(this.block, this.big_button, (obj1, obj2) => {
             if(this.breakable_1) {
                 this.breakable_1 = false;
@@ -218,14 +220,31 @@ class level_3 extends Phaser.Scene {
                 this.big_button.body.setSize(32,14).setOffset(0, 18);
                 button_2_wall.destroy();
                 this.big_button_collider.destroy();
+                this.block.body.setAllowGravity(false);
+                this.moveTween = this.tweens.add({
+                    targets: this.block,
+                    y: {from: this.block.y, to: this.big_button.y - 14},
+                    duration: 200,
+                    repeat: 0,
+                    yoyo: false,
+                });
             }
         });
+
         this.physics.add.collider(this.block_2, this.big_button_2, (obj1, obj2) => {
             if(this.breakable_2) {
                 const spawn_platform = level_3.createStaticLayer("spawn_platform", tileset, 0, 0);
                 spawn_platform.setCollisionByProperty({collides: true });
                 this.big_button_2.setTexture('big_button_down');
                 this.big_button_2.body.setSize(32,14).setOffset(0, 18);
+                this.block_2.body.setAllowGravity(false);
+                this.moveTween = this.tweens.add({
+                    targets: this.block_2,
+                    y: {from: this.block_2.y, to: this.big_button_2.y - 14},
+                    duration: 200,
+                    repeat: 0,
+                    yoyo: false,
+                });
                 this.spawn_spikes = level_3.createFromObjects("spawn_spikes", "spike", {
                     key: "tileset",
                     frame: 16
@@ -328,7 +347,7 @@ class level_3 extends Phaser.Scene {
         });
 
          // Door powerup overlap check
-         this.physics.add.overlap(this.player, this.door_group, (obj1, obj2) => {
+         this.physics.add.overlap(this.player, this.closed_door, (obj1, obj2) => {
             if(this.unlock) {
                 this.sound.play("level_complete", {volume: 0.1});
                 this.scene.start("end_game_scene");
@@ -338,6 +357,7 @@ class level_3 extends Phaser.Scene {
         // Key overlap check
         this.physics.add.overlap(this.player, this.key, (obj1, obj2) => {
             obj2.destroy(); // remove key
+            this.closed_door.setTexture('open_door');
             this.unlock = true;
             this.key_exists = false;
         });
@@ -458,7 +478,9 @@ class level_3 extends Phaser.Scene {
 
     checkpoint_check(){
         if(this.checkpoint == 0) {
-            this.scene.restart(this.level);
+            //this.scene.restart(this.level);
+            this.player.x = this.player_X;
+            this.player.y = this.player_Y;
         }
         else if(this.checkpoint == 1) {
             this.player.body.setVelocity(0);

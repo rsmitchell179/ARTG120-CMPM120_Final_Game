@@ -33,8 +33,6 @@ class menu extends Phaser.Scene {
     }
 
     update() {
-        //console.log("GASRASDFGSD");
-        //console.log(this.start);
         if(start) {
             this.sound.play('menu_select');
             this.scene.start("level_1_scene");
@@ -47,7 +45,6 @@ class menu extends Phaser.Scene {
 
     start_game() {
         start = true;
-        //console.log(this.start);
     }
 
     credit_click() {

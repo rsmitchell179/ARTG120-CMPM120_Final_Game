@@ -2,8 +2,8 @@
 // Binaisha Dastoor
 // Joshua Jung 
 // Ryan Mitchell
-// Game Title:  
-// Date Completed 
+// Game Title: Cubic Escape
+// Date Completed: 
 // Creative tilt justifications:  
 
 // Tame the JavaShrek
@@ -15,9 +15,9 @@ let config = {
     render: {
         pixelArt: true,
     },
-    width: 528,
-    height: 368,
-    zoom: 2,
+    width: 1056,
+    height: 736,
+    //zoom: 2,
     scale: {
         autoCenter: Phaser.Scale.CENTER_BOTH
     },

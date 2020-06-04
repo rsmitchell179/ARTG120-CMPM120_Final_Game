@@ -13,9 +13,9 @@ class level_1 extends Phaser.Scene {
         this.grown = false;
         this.unlock = false;
         this.box_is_pushable = false;
-        
+        this.push_text_exists = true;
         // Add background image 
-        this.background = this.add.image(center_x, center_y, 'background_level_1');
+        this.background = this.add.image(0, 0, 'background_level_1').setOrigin(0,0);
 
         // Load Map
         // Create the level
@@ -61,9 +61,10 @@ class level_1 extends Phaser.Scene {
         
         // Spawns exit door
         this.closed_door_spawn = level_1.findObject("object_layer", obj => obj.name === "door");
-        this.closed_door = new door(this, this.closed_door_spawn.x, this.closed_door_spawn.y - 15, 'locked_door');
+        this.closed_door = new door(this, this.closed_door_spawn.x, this.closed_door_spawn.y - 16, 'locked_door');
         
         // Creates instructional text
+        const movement_text = level_1.findObject("text_layer", obj => obj.name === "movement_text");
         const shrink_text = level_1.findObject("text_layer", obj => obj.name === "shrink_text");
         const grow_text = level_1.findObject("text_layer", obj => obj.name === "grow_text");
         const box_text = level_1.findObject("text_layer", obj => obj.name === "box_text");
@@ -71,8 +72,9 @@ class level_1 extends Phaser.Scene {
         const door_text = level_1.findObject("text_layer", obj => obj.name === "door_text");
         const key_text = level_1.findObject("text_layer", obj => obj.name === "key_text");
         // Spawn in intructional text
-        this.shrink_text = this.add.text(shrink_text.x, shrink_text.y, 'Collect blue\npowerup to shrink');
-        this.add.text(normal_text.x, normal_text.y, 'Press D to return\nto normal size\nPress R to reset level');
+        this.shrink_text = this.add.bitmapText(shrink_text.x, shrink_text.y, 'smaller_font', 'Collect blue\npowerup to shrink', 19);
+        this.movement_text = this.add.bitmapText(movement_text.x, movement_text.y, 'smaller_font', 'Use Arrow Keys to\n    navigate', 19);
+        this.add.bitmapText(normal_text.x, normal_text.y, 'smaller_font', 'Press D to return\nto normal size\nPress R to reset level', 17);
         
         // Creates a half block for shrunken tunnel escape
         this.half_block = level_1.createFromObjects("object_layer", "half_block", {
@@ -110,6 +112,7 @@ class level_1 extends Phaser.Scene {
         // setup camera
         this.cameras.main.setBounds(0, 0, level_1.widthInPixels, level_1.heightInPixels);
         this.cameras.main.startFollow(this.player, true, 0.25, 0.25); // (target, [,roundPixels][,lerpX][,lerpY])
+        this.cameras.main.setZoom(2);
 
         // set up input
         cursors = this.input.keyboard.createCursorKeys();
@@ -138,9 +141,10 @@ class level_1 extends Phaser.Scene {
          this.physics.add.overlap(this.player, this.shrink_powerup, (obj1, obj2) => {
             obj2.destroy(); // remove shrink powerup
             this.shrink_text.destroy();
+            this.movement_text.destroy();
             this.shrunk = true;
             this.grown = false;
-            this.grow_text = this.add.text(grow_text.x-14, grow_text.y, 'Collect yellow\npowerup to grow');
+            this.grow_text = this.add.bitmapText(grow_text.x-14, grow_text.y, 'smaller_font', 'Collect yellow\npowerup to grow', 19);
             this.sound.play("shrink_sound", {volume: 0.1})
             //this.player.setScale(0.5);
             let shrink_tween = this.tweens.add({
@@ -179,7 +183,7 @@ class level_1 extends Phaser.Scene {
             this.shrunk = false;
             this.box_1.body.immovable = false;
             this.box_2.body.immovable = false;
-            this.box_text = this.add.text(box_text.x-5, box_text.y, 'Push box here|');
+            this.box_text = this.add.bitmapText(box_text.x, box_text.y, 'smaller_font' , 'Push box here |', 19);
             this.sound.play("grow_sound", {volume: 0.1});
             let grow_tween = this.tweens.add({
                 targets: this.player,
@@ -190,13 +194,13 @@ class level_1 extends Phaser.Scene {
             });
             //this.player.setScale(2);
         });
-        
+
         // To add text to show the player to get the key 
         this.physics.add.overlap(this.player, this.grow_powerup_2, (obj1, obj2) => {
             obj2.destroy(); // remove grow powerup
             this.box_text.destroy();
             this.grow_text.destroy();
-            this.key_text = this.add.text(key_text.x - 27, key_text.y - 11, 'Grab key to\nunlock door->');
+            this.key_text = this.add.bitmapText(key_text.x - 15, key_text.y - 13, 'smaller_font', 'Grab key to\nunlock door', 19);
             this.grown = true;
             this.shrunk = false;
             this.sound.play("grow_sound", {volume: 0.1});
@@ -223,7 +227,7 @@ class level_1 extends Phaser.Scene {
          // Key overlap check
          this.physics.add.overlap(this.player, this.key, (obj1, obj2) => {
             obj2.destroy(); // remove key
-            this.door_text = this.add.text(door_text.x-27, door_text.y, 'Get to the door\nto complete  ->\nthe level', {fontSize: 14});
+            this.door_text = this.add.bitmapText(door_text.x, door_text.y, 'smaller_font', 'Get to the door\n  to complete \n   the level', 15);
             this.closed_door.setTexture('open_door');
             this.key_text.destroy();
             this.unlock = true;
@@ -285,7 +289,14 @@ class level_1 extends Phaser.Scene {
             this.box_2.body.setAccelerationX(0);
             this.box_2.body.setDragX(this.drag);
         }
-
+        // Destroy text when box is pushed there
+        if(this.box_1.x <= 375){
+            if(this.push_text_exists) {
+                this.box_text.destroy();
+                this.push_text_exists = false;
+            }
+        }
+        
         // Reset level
         if(Phaser.Input.Keyboard.JustDown(key_r)) {
             this.scene.restart(this.level);

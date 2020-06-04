@@ -17,7 +17,7 @@ class level_2 extends Phaser.Scene {
         this.unlock = false;
         this.box_is_pushable = false;
 
-        this.background = this.add.image(center_x + 45, center_y + 10, 'background_level_2');
+        this.background = this.add.image(0, 0, 'background_level_2').setOrigin(0, 0);
 
         // Load Map
         // Create the level
@@ -94,6 +94,7 @@ class level_2 extends Phaser.Scene {
         // setup camera
         this.cameras.main.setBounds(0, 0, level_2.widthInPixels, level_2.heightInPixels);
         this.cameras.main.startFollow(this.player, true, 0.25, 0.25); // (target, [,roundPixels][,lerpX][,lerpY])
+        this.cameras.main.setZoom(2);
 
         // set up input
         cursors = this.input.keyboard.createCursorKeys();
@@ -131,6 +132,15 @@ class level_2 extends Phaser.Scene {
                 this.big_button.body.setSize(32,14).setOffset(0, 18);
                 breakable_walls.destroy();
                 this.big_button_collider.destroy();
+                this.box_1.body.setAllowGravity(false);
+                //this.box_1.body.immovable = true;
+                this.moveTween = this.tweens.add({
+                    targets: this.box_1,
+                    y: {from: this.box_1.y, to: this.big_button.y - 14},
+                    duration: 200,
+                    repeat: 0,
+                    yoyo: false,
+                });
             }
         });
         

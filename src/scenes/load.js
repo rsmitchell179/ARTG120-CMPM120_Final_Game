@@ -3,7 +3,7 @@ class load extends Phaser.Scene {
         super("load_scene");
     }
 
-    preload(){
+    preload() {
         // Load game images and sprites
         this.load.path = "./assets/sprites/";
         this.load.image('player', 'player.png');
@@ -21,6 +21,7 @@ class load extends Phaser.Scene {
         this.load.image('orange_button_down', 'orange_button_down.png');
         this.load.image('background_level_1', 'background_level_1.png');
         this.load.image('background_level_2', 'background_level_2.png');
+        this.load.image('background_level_3', 'background_level_3.png');
         
         // Load tilemap and spritesheet
         this.load.path = "./assets/levels/";

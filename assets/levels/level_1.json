@@ -132,8 +132,8 @@
                  "type":"",
                  "visible":true,
                  "width":16,
-                 "x":488.424,
-                 "y":128.303
+                 "x":492.424,
+                 "y":127.803
                 }, 
                 {
                  "gid":2,
@@ -178,8 +178,8 @@
                  "text":
                     {
                      "color":"#ffffff",
-                     "fontfamily":"MS Shell Dlg 2",
-                     "pixelsize":15,
+                     "fontfamily":"SF Archery Black SC",
+                     "pixelsize":19,
                      "text":"Press D to return to normal size ",
                      "wrap":true
                     },
@@ -197,8 +197,7 @@
                  "text":
                     {
                      "color":"#ffffff",
-                     "fontfamily":"MS Shell Dlg 2",
-                     "pixelsize":15,
+                     "fontfamily":"SF Archery Black SC",
                      "text":"Collect blue powerup to shrink",
                      "wrap":true
                     },
@@ -216,8 +215,7 @@
                  "text":
                     {
                      "color":"#ffffff",
-                     "fontfamily":"MS Shell Dlg 2",
-                     "pixelsize":15,
+                     "fontfamily":"SF Archery Black SC",
                      "text":"Collect yellow powerup to grow",
                      "wrap":true
                     },
@@ -235,7 +233,7 @@
                  "text":
                     {
                      "color":"#ffffff",
-                     "fontfamily":"MS Shell Dlg 2",
+                     "fontfamily":"SF Archery Black SC",
                      "pixelsize":15,
                      "text":"Push box to here |",
                      "wrap":true
@@ -254,16 +252,15 @@
                  "text":
                     {
                      "color":"#ffffff",
-                     "fontfamily":"MS Shell Dlg 2",
-                     "pixelsize":15,
+                     "fontfamily":"SF Archery Black SC",
                      "text":"Go to the door to complete level ->",
                      "wrap":true
                     },
                  "type":"",
                  "visible":true,
                  "width":149,
-                 "x":345.5,
-                 "y":13.1667
+                 "x":333.5,
+                 "y":13.6667
                 }, 
                 {
                  "height":19,
@@ -280,6 +277,24 @@
                  "width":83,
                  "x":388.5,
                  "y":107.5
+                }, 
+                {
+                 "height":48.3333,
+                 "id":48,
+                 "name":"movement_text",
+                 "rotation":0,
+                 "text":
+                    {
+                     "color":"#ffffff",
+                     "fontfamily":"SF Archery Black SC",
+                     "text":"Use Arrow keys to navigate",
+                     "wrap":true
+                    },
+                 "type":"",
+                 "visible":true,
+                 "width":149,
+                 "x":21,
+                 "y":213.83335
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -288,7 +303,7 @@
          "y":0
         }],
  "nextlayerid":7,
- "nextobjectid":47,
+ "nextobjectid":49,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.3.4",

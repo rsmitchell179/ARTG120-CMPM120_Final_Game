@@ -18,10 +18,8 @@ class end_game extends Phaser.Scene {
         }
 
         // End Game Text
-        this.add.text(center_x, center_y - 70, 'Congratulations!!', menuConfig).setOrigin(0.5);
-        this.add.text(center_x, center_y, 'Press M for menu      \nPress R to play level again', menuConfig).setOrigin(0.5);
-        menuConfig.backgroundColor = '#00FF00';
-        menuConfig.color = '#000';
+        this.add.bitmapText(center_x, center_y - 70, 'font', 'THE END!!', 100).setOrigin(0.5);
+        this.add.bitmapText(center_x, center_y, 'smaller_font', '     Press M for menu      \n   Press R to play again', 30).setOrigin(0.5);
 
         // Define keys
         key_m = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M);
