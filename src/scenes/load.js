@@ -20,9 +20,15 @@ class load extends Phaser.Scene {
         this.load.image('orange_button_up', 'orange_button_up.png');
         this.load.image('player_death_particle', 'player_death_particle.png');
         this.load.image('orange_button_down', 'orange_button_down.png');
-        this.load.image('background_level_1', 'background_level_1.png');
+        this.load.image('menu_background', 'menu_background.png');
+        this.load.image('background_level_1', 'background_level_1.png')
         this.load.image('background_level_2', 'background_level_2.png');
         this.load.image('background_level_3', 'background_level_3.png');
+        this.load.image('end_game_background', 'end_game_background.png');
+
+        // Load human atlas for end game
+        this.load.path = "./assets/sprites/";
+        this.load.atlas('human_atlas', 'human.png', 'player.json');
         
         // Load tilemap and spritesheet
         this.load.path = "./assets/levels/";

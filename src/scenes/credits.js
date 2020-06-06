@@ -21,7 +21,7 @@ class credits extends Phaser.Scene {
         this.add.bitmapText(center_x, center_y + 130, 'smaller_font', 'Button sound - Coral_Island_Studios from freesound.org', 30).setOrigin(0.5);
         this.add.bitmapText(center_x, center_y + 170, 'smaller_font', 'Checkpoint sound - MattLeschuck from freesound.org', 30).setOrigin(0.5);
         // ---------------------------------Special Thanks to Playtesters (by Request)-------------------------------------
-        this.add.bitmapText(center_x, center_y + 220, 'smaller_font', 'And a special shoutout to these lovely playtesters', 37).setOrigin(0.5);
+        this.add.bitmapText(center_x, center_y + 220, 'smaller_font', 'And a special shoutout to these lovely playtesters', 38).setOrigin(0.5);
         this.add.bitmapText(center_x, center_y + 270, 'smaller_font', 'John Anthony, Tommy Robbins, Connor Biondi, Ben Roisen, Maheep Luthra', 30).setOrigin(0.5);
         
         this.exit_box = this.add.rectangle(game.config.width - 29, 19, 50, 25, 0x000000);

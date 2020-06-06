@@ -5,7 +5,6 @@ class level_2 extends Phaser.Scene {
 
     create() {
         // Variables and Settings 
-        this.max_y_vel = 200;
         this.acceleration = 170;
         this.drag = 7000;
         this.jump_vel = -350;
@@ -15,7 +14,8 @@ class level_2 extends Phaser.Scene {
         this.breakable = true;
         this.button_pressed = true;
         this.unlock = false;
-
+        
+        // Add the background to the level
         this.background = this.add.image(0, 0, 'background_level_2').setOrigin(0, 0);
 
         // Load Map
@@ -50,7 +50,7 @@ class level_2 extends Phaser.Scene {
         this.open_door = new door(this, this.open_door_spawn.x, this.open_door_spawn.y - 16, 'open_door');
 
         this.closed_door_spawn = level_2.findObject("object_layer", obj => obj.name === "door");
-        this.closed_door = new door(this, this.closed_door_spawn.x, this.closed_door_spawn.y - 15, 'locked_door');
+        this.closed_door = new door(this, this.closed_door_spawn.x, this.closed_door_spawn.y - 16, 'locked_door');
        
 
         this.door_group = this.add.group(this.door);
@@ -86,8 +86,7 @@ class level_2 extends Phaser.Scene {
 
         // #region Add Player to game world
         const player_spawn = level_2.findObject("object_layer", obj => obj.name === "player_spawn");
-        this.player = this.physics.add.sprite(player_spawn.x, player_spawn.y,'player');
-        this.player.body.setAllowGravity(true);
+        this.player = new player(this, player_spawn.x, player_spawn.y);
         // #endregion
 
         // setup camera

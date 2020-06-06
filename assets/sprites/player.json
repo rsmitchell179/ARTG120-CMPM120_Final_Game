@@ -1,0 +1,17 @@
+{"frames":{
+    "Run1":{"frame":{"x":0,"y":0,"w":101,"h":100},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":101,"h":100},"sourceSize":{"w":101,"h":100}},
+    "Run2":{"frame":{"x":0,"y":101,"w":101,"h":100},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":101,"h":100},"sourceSize":{"w":101,"h":100}},
+    "Run3":{"frame":{"x":102,"y":0,"w":101,"h":100},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":101,"h":100},"sourceSize":{"w":101,"h":100}},
+    "Run4":{"frame":{"x":102,"y":101,"w":101,"h":100},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":101,"h":100},"sourceSize":{"w":101,"h":100}},
+    "Run5":{"frame":{"x":0,"y":202,"w":101,"h":100},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":101,"h":100},"sourceSize":{"w":101,"h":100}},
+    "Run6":{"frame":{"x":102,"y":202,"w":101,"h":100},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":101,"h":100},"sourceSize":{"w":101,"h":100}},
+    "Run7":{"frame":{"x":204,"y":0,"w":101,"h":100},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":101,"h":100},"sourceSize":{"w":101,"h":100}},
+    "Run8":{"frame":{"x":204,"y":101,"w":101,"h":100},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":101,"h":100},"sourceSize":{"w":101,"h":100}},
+    "Run9":{"frame":{"x":204,"y":202,"w":101,"h":100},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":101,"h":100},"sourceSize":{"w":101,"h":100}},
+    "Run10":{"frame":{"x":0,"y":303,"w":101,"h":100},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":101,"h":100},"sourceSize":{"w":101,"h":100}},
+    "Jump3":{"frame":{"x":102,"y":303,"w":101,"h":100},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":101,"h":100},"sourceSize":{"w":101,"h":100}},
+    "Jump4":{"frame":{"x":204,"y":303,"w":101,"h":100},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":101,"h":100},"sourceSize":{"w":101,"h":100}},
+    "Jump5":{"frame":{"x":306,"y":0,"w":101,"h":100},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":101,"h":100},"sourceSize":{"w":101,"h":100}},
+    "Jump1":{"frame":{"x":306,"y":101,"w":101,"h":100},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":101,"h":100},"sourceSize":{"w":101,"h":100}},
+    "Jump2":{"frame":{"x":306,"y":202,"w":101,"h":100},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":101,"h":100},"sourceSize":{"w":101,"h":100}}},
+    "meta":{"app":"https://www.leshylabs.com/apps/sstool/","version":"Leshy SpriteSheet Tool v0.8.4","image":"human.png","size":{"w":407,"h":403},"scale":1}}

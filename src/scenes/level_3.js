@@ -5,7 +5,6 @@ class level_3 extends Phaser.Scene {
 
     create() {
         // Variables and Settings 
-        this.max_y_vel = 200;
         this.acceleration = 170;
         this.drag = 7000;
         this.jump_vel = -350;
@@ -21,6 +20,7 @@ class level_3 extends Phaser.Scene {
         this.player_Y;
         this.checkpoint = 0;
         
+        // Booleans to use for checkpoint spawning 
         this.spawned_spikes = false;
         this.draw_hit_box = false;
         this.key_wall_exists = true;
@@ -34,6 +34,7 @@ class level_3 extends Phaser.Scene {
         this.checkpoint_overlap_1 = true;
         this.checkpoint_overlap_2 = true;
 
+        // Add the background to the level
         this.background = this.add.image(0, 0, 'background_level_3').setOrigin(0, 0);
 
         // Load Map
@@ -176,13 +177,11 @@ class level_3 extends Phaser.Scene {
         //this.block_2.body.setAllowGravity(true);
         this.block_2.body.immovable = true;
 
-        // #region Add Player to game world
+        // Add Player to game world
         const player_spawn = level_3.findObject("object_layer", obj => obj.name === "player_spawn");
         this.player_X = player_spawn.x;
         this.player_Y = player_spawn.y;
-        this.player = this.physics.add.sprite(this.player_X, this.player_Y,'player');
-        this.player.body.setAllowGravity(true);
-        // #endregion
+        this.player = new player(this, this.player_X, this.player_Y);
 
         // setup camera
         this.cameras.main.setBounds(0, 0, level_3.widthInPixels, level_3.heightInPixels);
@@ -204,6 +203,7 @@ class level_3 extends Phaser.Scene {
         this.physics.add.collider(this.player, platform_layer);
         this.physics.add.collider(this.block, platform_layer);
         this.physics.add.collider(this.player, this.block);
+        // Creates coliders that can be destroyed upon an event
         this.button_1_collider = this.physics.add.collider(this.player, button_1_wall);
         this.button_2_collider = this.physics.add.collider(this.player, key_wall);
         this.big_button_collider = this.physics.add.collider(this.player, button_2_wall);
@@ -212,7 +212,7 @@ class level_3 extends Phaser.Scene {
         this.physics.add.collider(this.player, this.half_block);
         this.physics.add.collider(this.player, this.half_floor);
         this.physics.add.collider(this.player, this.half_left_wall);
-        
+        // First big button event in level 3
         this.physics.add.collider(this.block, this.big_button, (obj1, obj2) => {
             if(this.breakable_1) {
                 this.breakable_1 = false;
@@ -231,7 +231,7 @@ class level_3 extends Phaser.Scene {
                     yoyo: false,
                 });
         });
-
+        // Second big button event that is also the first time spawining in platforms rather than destroy them
         this.physics.add.collider(this.block_2, this.big_button_2, (obj1, obj2) => {
             if(this.breakable_2) {
                 const spawn_platform = level_3.createStaticLayer("spawn_platform", tileset, 0, 0);
@@ -263,7 +263,6 @@ class level_3 extends Phaser.Scene {
                     repeat: 0,
                     yoyo: false,
                 });
-            //this.block_2.body.setAllowGravity(false);
         });
 
         this.physics.add.collider(this.player, this.button_1, (obj1, obj2) => {

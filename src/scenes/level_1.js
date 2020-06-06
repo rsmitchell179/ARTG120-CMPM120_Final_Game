@@ -96,16 +96,14 @@ class level_1 extends Phaser.Scene {
         const box_spawn_1 = level_1.findObject("object_layer", obj => obj.name === "box_spawn_1");
         this.box_1 = new box(this, box_spawn_1.x, box_spawn_1.y);
         //this.box_1.body.setAllowGravity(true);
-        
+
         const box_spawn_2 = level_1.findObject("object_layer", obj => obj.name === "box_spawn_2");
         this.box_2 = new box(this, box_spawn_2.x, box_spawn_2.y);
         //this.box_2.body.setAllowGravity(true);
 
         // #region Add Player to game world
         const player_spawn = level_1.findObject("object_layer", obj => obj.name === "player_spawn");
-        this.player = this.physics.add.sprite(player_spawn.x, player_spawn.y,'player');
-        this.player.setCollideWorldBounds(true);
-        this.player.body.setAllowGravity(true);
+        this.player = new player(this, player_spawn.x, player_spawn.y);
         // #endregion
 
         // setup camera

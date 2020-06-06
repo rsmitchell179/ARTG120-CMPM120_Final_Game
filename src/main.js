@@ -11,6 +11,7 @@
 //                               There is also a checkpoint system in level 3 that saves the players spawn location
 //                               depending on how far into the level they are. All of the art assets that you see were made by Binaisha and each
 //                               level was designed in tiled using input from each group member. Josh and Ryan worked together to code the game using live share extension for visual studio code
+//                               We also have a link to our enldess runner, tying in with our other game.
 
 // Tame the JavaShrek
 "use strict";
@@ -53,4 +54,4 @@ let text_space = 64;
 let key_g, key_s, key_d, key_r, key_m ,key_right;
 // Mouse 
 var input, mouse;
-var start, credit, go_menu;
+var start, credit, go_menu, endless;
