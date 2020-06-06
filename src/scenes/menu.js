@@ -42,7 +42,7 @@ class menu extends Phaser.Scene {
     update() {
         if(start) {
             this.sound.play('menu_select');
-            this.scene.start("end_game_scene");
+            this.scene.start("level_1_scene");
         }
         if(credit) {
             this.sound.play('menu_select');
