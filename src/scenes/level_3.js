@@ -216,11 +216,13 @@ class level_3 extends Phaser.Scene {
         this.physics.add.collider(this.block, this.big_button, (obj1, obj2) => {
             if(this.breakable_1) {
                 this.breakable_1 = false;
+                this.sound.play("button_sound", {volume: 1});
                 this.big_button.setTexture('big_button_down');
                 this.big_button.body.setSize(32,14).setOffset(0, 18);
                 button_2_wall.destroy();
                 this.big_button_collider.destroy();
-                this.block.body.setAllowGravity(false);
+            }
+            this.block.body.setAllowGravity(false);
                 this.moveTween = this.tweens.add({
                     targets: this.block,
                     y: {from: this.block.y, to: this.big_button.y - 14},
@@ -228,23 +230,16 @@ class level_3 extends Phaser.Scene {
                     repeat: 0,
                     yoyo: false,
                 });
-            }
         });
 
         this.physics.add.collider(this.block_2, this.big_button_2, (obj1, obj2) => {
             if(this.breakable_2) {
                 const spawn_platform = level_3.createStaticLayer("spawn_platform", tileset, 0, 0);
                 spawn_platform.setCollisionByProperty({collides: true });
+                this.sound.play("button_sound", {volume: 1});
                 this.big_button_2.setTexture('big_button_down');
                 this.big_button_2.body.setSize(32,14).setOffset(0, 18);
-                this.block_2.body.setAllowGravity(false);
-                this.moveTween = this.tweens.add({
-                    targets: this.block_2,
-                    y: {from: this.block_2.y, to: this.big_button_2.y - 14},
-                    duration: 200,
-                    repeat: 0,
-                    yoyo: false,
-                });
+                
                 this.spawn_spikes = level_3.createFromObjects("spawn_spikes", "spike", {
                     key: "tileset",
                     frame: 16
@@ -255,16 +250,26 @@ class level_3 extends Phaser.Scene {
                 this.physics.world.enable(this.spawn_spikes, Phaser.Physics.Arcade.STATIC_BODY);
                 this.physics.add.collider(this.player, spawn_platform);
                 this.physics.add.collider(this.player, this.spawn_spike_group, (obj1, obj2) => {
-                    this.checkpoint_check();
-               });
-               this.breakable_2 = false;
+                this.sound.play("die_sound", {volume: 0.3});
+                this.checkpoint_check();
+                });
+                this.breakable_2 = false;
             }
+            this.block_2.body.setAllowGravity(false);
+                this.moveTween = this.tweens.add({
+                    targets: this.block_2,
+                    y: {from: this.block_2.y, to: this.big_button_2.y - 14},
+                    duration: 200,
+                    repeat: 0,
+                    yoyo: false,
+                });
             //this.block_2.body.setAllowGravity(false);
         });
 
         this.physics.add.collider(this.player, this.button_1, (obj1, obj2) => {
             if(this.button_1_pressed && this.player.body.touching.down) {
                 this.button_1_pressed = false;
+                this.sound.play("button_sound", {volume: 0.8});
                 this.button_1.setTexture('orange_button_down');
                 this.button_1.body.setSize(16, 7).setOffset(0, 8);
                 button_1_wall.destroy();
@@ -274,6 +279,7 @@ class level_3 extends Phaser.Scene {
         this.physics.add.collider(this.player, this.button_2, (obj1, obj2) => {
             if(this.button_2_pressed && this.player.body.touching.down) {
                 this.button_2_pressed = false;
+                this.sound.play("button_sound", {volume: 0.8});
                 this.button_2.setTexture('orange_button_down');
                 this.button_2.body.setSize(16, 7).setOffset(0, 8);
                 key_wall.destroy();
@@ -283,7 +289,8 @@ class level_3 extends Phaser.Scene {
         this.physics.add.collider(this.player, this.big_button);
         this.physics.add.collider(this.player, this.big_button_2);
         this.physics.add.collider(this.player, this.spike_group, (obj1, obj2) => {
-             this.checkpoint_check();
+            this.sound.play("die_sound", {volume: 0.3});
+            this.checkpoint_check();
         });
 
         // Overlap checkers
@@ -349,7 +356,7 @@ class level_3 extends Phaser.Scene {
          // Door powerup overlap check
          this.physics.add.overlap(this.player, this.closed_door, (obj1, obj2) => {
             if(this.unlock) {
-                this.sound.play("level_complete", {volume: 0.1});
+                this.sound.play("level_complete", {volume: 0.4});
                 this.scene.start("end_game_scene");
             }
         });
@@ -357,6 +364,7 @@ class level_3 extends Phaser.Scene {
         // Key overlap check
         this.physics.add.overlap(this.player, this.key, (obj1, obj2) => {
             obj2.destroy(); // remove key
+            this.sound.play("key_sound", {volume: 0.4});
             this.closed_door.setTexture('open_door');
             this.unlock = true;
             this.key_exists = false;
@@ -365,6 +373,9 @@ class level_3 extends Phaser.Scene {
         // Chekpoint 1 overlap
         this.checkpoint_1_overlap = this.physics.add.overlap(this.player, this.checkpoint_1, (obj1, obj2) => {
             const checkpoint_1_spawn = level_3.findObject("object_layer", obj => obj.name === "checkpoint_1");
+            if(this.checkpoint == 0) {
+                this.sound.play("checkpoint_sound", {volume: 0.4});   
+            }
             this.checkpoint_1.setTexture('checkpoint_flag_up');
             this.checkpoint = 1;
             this.player_X = checkpoint_1_spawn.x;
@@ -373,6 +384,9 @@ class level_3 extends Phaser.Scene {
         // Checkpoint 2 overlap
         this.checkpoint_2_overlap = this.physics.add.overlap(this.player, this.checkpoint_2, (obj1, obj2) => {
             const checkpoint_2_spawn = level_3.findObject("object_layer", obj => obj.name === "checkpoint_2");
+            if(this.checkpoint == 1) {
+                this.sound.play("checkpoint_sound", {volume: 0.4});   
+            }
             this.checkpoint_2.setTexture('checkpoint_flag_up');
             this.checkpoint = 2;
             this.player_X = checkpoint_2_spawn.x;
@@ -385,6 +399,9 @@ class level_3 extends Phaser.Scene {
        // Checkpoint 3 overlap
        this.checkpoint_3_overlap = this.physics.add.overlap(this.player, this.checkpoint_3, (obj1, obj2) => {
         const checkpoint_3_spawn = level_3.findObject("object_layer", obj => obj.name === "checkpoint_3");
+        if(this.checkpoint == 2) {
+            this.sound.play("checkpoint_sound", {volume: 0.4});   
+        }
         this.checkpoint_3.setTexture('checkpoint_flag_up');
         this.checkpoint = 3;
         this.player_X = checkpoint_3_spawn.x;
@@ -424,6 +441,7 @@ class level_3 extends Phaser.Scene {
         if(Phaser.Input.Keyboard.JustDown(key_d)) {
             //console.log(this.grown);
             if(this.shrunk) {
+                this.sound.play('return_normal_sound', {volume: 0.1})
                 let small_to_normal_tween = this.tweens.add({
                     targets: this.player,
                     scale: {from: 0.5, to: 1},
@@ -432,6 +450,7 @@ class level_3 extends Phaser.Scene {
                     yoyo: false,
                 });
             } else if (this.grown) {
+                this.sound.play('return_normal_sound', {volume: 0.1})
                 let grow_to_normal_tween = this.tweens.add({
                     targets: this.player,
                     scale: {from: 2, to: 1},
@@ -466,11 +485,12 @@ class level_3 extends Phaser.Scene {
         
         // Reset level
         if(Phaser.Input.Keyboard.JustDown(key_r)) {
-            this.checkpoint_check();
+            this.scene.restart(this.level);
         }
 
         // Fall through level check
         if(this.player.y >= this.height_of_level) {
+            this.sound.play("die_sound", {volume: 0.3});
             this.checkpoint_check();
         }
 
@@ -489,6 +509,7 @@ class level_3 extends Phaser.Scene {
             this.block.body.setVelocity(0);
             this.block.x = this.box_spawn.x;
             this.block.y = this.box_spawn.y;
+            this.block.body.setAllowGravity(true);
             this.block.body.immovable = true;
             this.player.setScale(1);
             this.grown = false;
@@ -562,6 +583,7 @@ class level_3 extends Phaser.Scene {
             this.grown = false;
             this.block_2.x = this.box_spawn_2.x;
             this.block_2.y = this.box_spawn_2.y;
+            this.block_2.body.setAllowGravity(true);
             this.block_2.setVelocity(0);
             this.block_2.body.immovable = true;
             if(!this.grow_powerup_2_exists){

@@ -3,8 +3,14 @@
 // Joshua Jung 
 // Ryan Mitchell
 // Game Title: Cubic Escape
-// Date Completed: 
-// Creative tilt justifications:  
+// Date Completed: 6/7/20
+// Creative tilt justifications: All of the levels are based around triggered events. Certain parts of the level will open up or be destroyed
+//                               depending on which buttons they hit. The player can also only interact with certain objects depending on which
+//                               powerup they have active. We also fixed some visial bugs(Josh: The box physics were a pain to work with.)(Ryan: Box go through my button BUT NOT ANYMORE HAHA)
+//                               (Josh: We used a tween to move the box down with the button while deactivateing gravity so it wouldn't go through the button)(Ryan: We basically fixed it with hacks ;) ). 
+//                               There is also a checkpoint system in level 3 that saves the players spawn location
+//                               depending on how far into the level they are. All of the art assets that you see were made by Binaisha and each
+//                               level was designed in tiled using input from each group member. Josh and Ryan worked together to code the game using live share extension for visual studio code
 
 // Tame the JavaShrek
 "use strict";
@@ -17,7 +23,8 @@ let config = {
     },
     width: 1056,
     height: 736,
-    //zoom: 2,
+    // Broke game and made text blurry (*Angry Face*)
+    // zoom: 2,
     scale: {
         autoCenter: Phaser.Scale.CENTER_BOTH
     },

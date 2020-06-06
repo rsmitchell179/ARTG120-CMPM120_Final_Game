@@ -4,19 +4,6 @@ class end_game extends Phaser.Scene {
     }
 
     create() {
-        // Menu display 
-        let menuConfig = {
-            fontFamily: 'Courier',
-            fontSize: '28px',
-            color: '#FFFFFF',
-            align: 'right',
-            padding: {
-                top: 5, 
-                bottom: 5,
-            },
-            fixedWidth: 0
-        }
-
         // End Game Text
         this.add.bitmapText(center_x, center_y - 70, 'font', 'THE END!!', 100).setOrigin(0.5);
         this.add.bitmapText(center_x, center_y, 'smaller_font', '     Press M for menu      \n   Press R to play again', 30).setOrigin(0.5);

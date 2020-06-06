@@ -15,7 +15,6 @@ class level_2 extends Phaser.Scene {
         this.breakable = true;
         this.button_pressed = true;
         this.unlock = false;
-        this.box_is_pushable = false;
 
         this.background = this.add.image(0, 0, 'background_level_2').setOrigin(0, 0);
 
@@ -119,6 +118,7 @@ class level_2 extends Phaser.Scene {
         this.physics.add.collider(this.player, this.button, (obj1, obj2) => {
             if(this.button_pressed && this.player.body.touching.down) {
                 this.button_pressed = false;
+                this.sound.play("button_sound", {volume: 0.8});
                 this.button.setTexture('orange_button_down');
                 this.button.body.setSize(16, 7).setOffset(0, 10);
                 button_wall.destroy();
@@ -128,6 +128,7 @@ class level_2 extends Phaser.Scene {
         this.physics.add.collider(this.box_1, this.big_button, (obj1, obj2) => {
             if(this.breakable) {
                 this.breakable = false;
+                this.sound.play("button_sound", {volume: 1});
                 this.big_button.setTexture('big_button_down');
                 this.big_button.body.setSize(32,14).setOffset(0, 18);
                 breakable_walls.destroy();
@@ -184,7 +185,7 @@ class level_2 extends Phaser.Scene {
         // Door powerup overlap check
         this.physics.add.overlap(this.player, this.closed_door, (obj1, obj2) => {
             if(this.unlock) {
-                this.sound.play("level_complete", {volume: 0.1});
+                this.sound.play("level_complete", {volume: 0.4});
                 this.scene.start("level_3_scene");
             }
         });
@@ -192,6 +193,7 @@ class level_2 extends Phaser.Scene {
         // Key overlap check
         this.physics.add.overlap(this.player, this.key, (obj1, obj2) => {
             obj2.destroy(); // remove key
+            this.sound.play("key_sound", {volume: 0.4});
             this.closed_door.setTexture('open_door');
             this.unlock = true;
         });
@@ -220,6 +222,7 @@ class level_2 extends Phaser.Scene {
         if(Phaser.Input.Keyboard.JustDown(key_d)) {
             //console.log(this.grown);
             if(this.shrunk) {
+                this.sound.play('return_normal_sound', {volume: 0.1})
                 let small_to_normal_tween = this.tweens.add({
                     targets: this.player,
                     scale: {from: 0.5, to: 1},
@@ -228,6 +231,7 @@ class level_2 extends Phaser.Scene {
                     yoyo: false,
                 });
             } else if (this.grown) {
+                this.sound.play('return_normal_sound', {volume: 0.1})
                 let grown_to_normal_tween = this.tweens.add({
                     targets: this.player,
                     scale: {from: 2, to: 1},

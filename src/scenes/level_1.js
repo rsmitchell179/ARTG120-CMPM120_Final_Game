@@ -96,8 +96,7 @@ class level_1 extends Phaser.Scene {
         const box_spawn_1 = level_1.findObject("object_layer", obj => obj.name === "box_spawn_1");
         this.box_1 = new box(this, box_spawn_1.x, box_spawn_1.y);
         //this.box_1.body.setAllowGravity(true);
-        this.block_is_pushable = true;
-
+        
         const box_spawn_2 = level_1.findObject("object_layer", obj => obj.name === "box_spawn_2");
         this.box_2 = new box(this, box_spawn_2.x, box_spawn_2.y);
         //this.box_2.body.setAllowGravity(true);
@@ -219,7 +218,7 @@ class level_1 extends Phaser.Scene {
         // Door powerup overlap check
         this.physics.add.overlap(this.player, this.closed_door, (obj1, obj2) => {
             if(this.unlock) {
-                this.sound.play("level_complete", {volume: 0.1});
+                this.sound.play("level_complete", {volume: 0.4});
                 this.scene.start("level_2_scene");
             }
         });
@@ -227,6 +226,7 @@ class level_1 extends Phaser.Scene {
          // Key overlap check
          this.physics.add.overlap(this.player, this.key, (obj1, obj2) => {
             obj2.destroy(); // remove key
+            this.sound.play("key_sound", {volume: 0.4});
             this.door_text = this.add.bitmapText(door_text.x, door_text.y, 'smaller_font', 'Get to the door\n  to complete \n   the level', 15);
             this.closed_door.setTexture('open_door');
             this.key_text.destroy();
@@ -255,6 +255,7 @@ class level_1 extends Phaser.Scene {
         if(Phaser.Input.Keyboard.JustDown(key_d)) {
             //console.log(this.grown);
             if(this.shrunk) {
+                this.sound.play('return_normal_sound', {volume: 0.1});
                 let small_to_normal_tween = this.tweens.add({
                     targets: this.player,
                     scale: {from: 0.5, to: 1},
@@ -263,6 +264,7 @@ class level_1 extends Phaser.Scene {
                     yoyo: false,
                 });
             } else if (this.grown) {
+                this.sound.play('return_normal_sound', {volume: 0.1});
                 let grow_to_normal_tween = this.tweens.add({
                     targets: this.player,
                     scale: {from: 2, to: 1},
