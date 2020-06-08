@@ -54,7 +54,7 @@ class load extends Phaser.Scene {
         this.load.audio("die_sound", "Die_Sound.mp3");
 
         // Load font 
-        // Font made by ShyFoundry Fonts from 1001fonts.com
+        // Font: SF Archery Black Font Family made by ShyFoundry Fonts from 1001fonts.com 
         this.load.path = "./assets/font/";
         this.load.bitmapFont('font', 'font.png', 'font.fnt');
         this.load.bitmapFont('real_font', 'real_font.png', 'real_font.fnt');
